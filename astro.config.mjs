@@ -4,8 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://superbenefit.github.io',
-	base: '/governance-site',
+	site: 'https://governance.superbenefit.org',
 	integrations: [
 		starlight({
 			title: 'SuperBenefit Governance',
