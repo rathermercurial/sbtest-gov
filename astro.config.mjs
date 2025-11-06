@@ -29,8 +29,14 @@ export default defineConfig({
 			customCss: [
 				'./src/styles/custom.css',
 			],
+			// Override Sidebar component with custom implementation
+			// The custom sidebar dynamically generates navigation from governance collections
+			components: {
+				Sidebar: './src/components/starlight/Sidebar.astro',
+			},
+			// Sidebar config is not used when Sidebar component is overridden,
+			// but kept here for reference/documentation
 			sidebar: [
-				// Main governance sections (prominent)
 				{
 					label: 'Agreements',
 					autogenerate: { directory: 'agreements' },
@@ -43,7 +49,6 @@ export default defineConfig({
 					label: 'Proposals',
 					autogenerate: { directory: 'proposals' },
 				},
-				// Visual separator and de-emphasized root pages
 				{
 					label: 'Reference',
 					collapsed: true,
