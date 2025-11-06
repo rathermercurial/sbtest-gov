@@ -59,10 +59,11 @@ export const collections = {
 	// Governance agreements collection
 	// Loads from: src/content/governance/agreements/**/*.md
 	// Rendered by: src/pages/agreements/[...slug].astro
-	// Routes: /agreements/*, /agreements/dao/*, /agreements/community/*
+	// Routes: /agreements/dao/*, /agreements/community/*
+	// Note: Excludes index.md files (handled by docs collection in src/content/docs/)
 	agreements: defineCollection({
 		loader: glob({
-			pattern: ['**/*.md', '!**/readme.md'],
+			pattern: ['**/*.md', '!**/readme.md', '!**/index.md'],
 			base: './src/content/governance/agreements'
 		}),
 		schema: governanceSchema,
@@ -71,10 +72,11 @@ export const collections = {
 	// Governance policies collection
 	// Loads from: src/content/governance/policies/**/*.md
 	// Rendered by: src/pages/policies/[...slug].astro
-	// Routes: /policies/*, /policies/operations/*, /policies/metagovernance/*, etc.
+	// Routes: /policies/operations/*, /policies/metagovernance/*, /policies/platforms/*
+	// Note: Excludes index.md files (handled by docs collection in src/content/docs/)
 	policies: defineCollection({
 		loader: glob({
-			pattern: ['**/*.md', '!**/readme.md'],
+			pattern: ['**/*.md', '!**/readme.md', '!**/index.md'],
 			base: './src/content/governance/policies'
 		}),
 		schema: governanceSchema,
@@ -84,9 +86,10 @@ export const collections = {
 	// Loads from: src/content/governance/proposals/**/*.md
 	// Rendered by: src/pages/proposals/[...slug].astro
 	// Routes: /proposals/*
+	// Note: Excludes index.md files (handled by docs collection in src/content/docs/)
 	proposals: defineCollection({
 		loader: glob({
-			pattern: ['**/*.md', '!**/readme.md'],
+			pattern: ['**/*.md', '!**/readme.md', '!**/index.md'],
 			base: './src/content/governance/proposals'
 		}),
 		schema: governanceSchema,
