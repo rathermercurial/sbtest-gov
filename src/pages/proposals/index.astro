@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+// Get all proposals
+const proposals = await getCollection('proposals');
+
+// Sort by date if available, otherwise by title
+const sortedProposals = proposals.sort((a, b) => {
+	if (a.data.lastUpdated && b.data.lastUpdated) {
+		return b.data.lastUpdated.getTime() - a.data.lastUpdated.getTime();
+	}
+	const titleA = a.data.title || a.id;
+	const titleB = b.data.title || b.id;
+	return titleA.localeCompare(titleB);
+});
+---
+
+<StarlightPage
+	frontmatter={{
+		title: 'Proposals',
+		description: 'Institutional memory archive preserving decision-making processes and deliberative context',
+	}}
+>
+	<div class="sl-markdown-content">
+		<p class="lead">
+			Proposals serve as the institutional memory archive for SuperBenefit DAO, preserving decision-making processes and the deliberative context that shaped our governance.
+		</p>
+
+		{sortedProposals.length === 0 ? (
+			<p class="empty-state">
+				No proposals have been archived yet. This collection will grow as governance decisions are documented.
+			</p>
+		) : (
+			<ul class="proposals-list">
+				{sortedProposals.map(proposal => (
+					<li>
+						<a href={`/proposals/${proposal.id}/`}>
+							{proposal.data.title || proposal.id.replace('.md', '')}
+						</a>
+						{proposal.data.description && (
+							<p class="description">{proposal.data.description}</p>
+						)}
+						{proposal.data.lastUpdated && (
+							<p class="date">
+								Updated: {proposal.data.lastUpdated.toLocaleDateString('en-US', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric'
+								})}
+							</p>
+						)}
+					</li>
+				))}
+			</ul>
+		)}
+	</div>
+
+	<style>
+		.lead {
+			font-size: 1.25rem;
+			line-height: 1.6;
+			margin-bottom: 2rem;
+		}
+
+		.empty-state {
+			padding: 2rem;
+			background: var(--sl-color-gray-6);
+			border-radius: 0.5rem;
+			text-align: center;
+			color: var(--sl-color-gray-2);
+		}
+
+		.proposals-list {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.proposals-list li {
+			margin-bottom: 1.5rem;
+			padding-left: 1.5rem;
+			position: relative;
+		}
+
+		.proposals-list li::before {
+			content: "→";
+			position: absolute;
+			left: 0;
+			color: var(--sl-color-accent);
+		}
+
+		.proposals-list a {
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.proposals-list a:hover {
+			text-decoration: underline;
+		}
+
+		.description {
+			margin-top: 0.25rem;
+			font-size: 0.9rem;
+			color: var(--sl-color-gray-3);
+		}
+
+		.date {
+			margin-top: 0.25rem;
+			font-size: 0.85rem;
+			color: var(--sl-color-gray-4);
+		}
+	</style>
+</StarlightPage>

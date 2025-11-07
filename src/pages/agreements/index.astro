@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+// Get all agreements and group by folder
+const agreements = await getCollection('agreements');
+
+// Group by first folder segment
+const groupedAgreements: Record<string, typeof agreements> = {};
+agreements.forEach(agreement => {
+	const folder = agreement.id.split('/')[0] || 'other';
+	if (!groupedAgreements[folder]) {
+		groupedAgreements[folder] = [];
+	}
+	groupedAgreements[folder].push(agreement);
+});
+
+const formatFolderName = (folder: string) => {
+	return folder.charAt(0).toUpperCase() + folder.slice(1);
+};
+---
+
+<StarlightPage
+	frontmatter={{
+		title: 'Agreements',
+		description: 'Relational foundations and core agreements that define how community members work together',
+	}}
+>
+	<div class="sl-markdown-content">
+		<p class="lead">
+			Agreements define the relational foundations and core commitments that guide how SuperBenefit DAO community members work together.
+		</p>
+
+		{Object.entries(groupedAgreements).sort().map(([folder, items]) => (
+			<div class="agreement-group">
+				<h2>{formatFolderName(folder)}</h2>
+				<ul>
+					{items.map(agreement => (
+						<li>
+							<a href={`/agreements/${agreement.id}/`}>
+								{agreement.data.title || agreement.id.split('/').pop()?.replace('.md', '')}
+							</a>
+							{agreement.data.description && (
+								<p class="description">{agreement.data.description}</p>
+							)}
+						</li>
+					))}
+				</ul>
+			</div>
+		))}
+	</div>
+
+	<style>
+		.lead {
+			font-size: 1.25rem;
+			line-height: 1.6;
+			margin-bottom: 2rem;
+		}
+
+		.agreement-group {
+			margin-bottom: 2rem;
+		}
+
+		.agreement-group h2 {
+			margin-top: 2rem;
+			margin-bottom: 1rem;
+		}
+
+		.agreement-group ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.agreement-group li {
+			margin-bottom: 1rem;
+			padding-left: 1.5rem;
+			position: relative;
+		}
+
+		.agreement-group li::before {
+			content: "→";
+			position: absolute;
+			left: 0;
+			color: var(--sl-color-accent);
+		}
+
+		.agreement-group a {
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.agreement-group a:hover {
+			text-decoration: underline;
+		}
+
+		.description {
+			margin-top: 0.25rem;
+			font-size: 0.9rem;
+			color: var(--sl-color-gray-3);
+		}
+	</style>
+</StarlightPage>

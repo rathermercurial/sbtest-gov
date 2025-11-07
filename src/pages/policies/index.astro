@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+// Get all policies and group by folder
+const policies = await getCollection('policies');
+
+// Group by first folder segment
+const groupedPolicies: Record<string, typeof policies> = {};
+policies.forEach(policy => {
+	const folder = policy.id.split('/')[0] || 'other';
+	if (!groupedPolicies[folder]) {
+		groupedPolicies[folder] = [];
+	}
+	groupedPolicies[folder].push(policy);
+});
+
+const formatFolderName = (folder: string) => {
+	return folder.charAt(0).toUpperCase() + folder.slice(1);
+};
+---
+
+<StarlightPage
+	frontmatter={{
+		title: 'Policies',
+		description: 'Practical coordination mechanisms across different operational domains',
+	}}
+>
+	<div class="sl-markdown-content">
+		<p class="lead">
+			Policies define practical coordination mechanisms across different operational domains within SuperBenefit DAO.
+		</p>
+
+		{Object.entries(groupedPolicies).sort().map(([folder, items]) => (
+			<div class="policy-group">
+				<h2>{formatFolderName(folder)}</h2>
+				<ul>
+					{items.map(policy => (
+						<li>
+							<a href={`/policies/${policy.id}/`}>
+								{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}
+							</a>
+							{policy.data.description && (
+								<p class="description">{policy.data.description}</p>
+							)}
+						</li>
+					))}
+				</ul>
+			</div>
+		))}
+	</div>
+
+	<style>
+		.lead {
+			font-size: 1.25rem;
+			line-height: 1.6;
+			margin-bottom: 2rem;
+		}
+
+		.policy-group {
+			margin-bottom: 2rem;
+		}
+
+		.policy-group h2 {
+			margin-top: 2rem;
+			margin-bottom: 1rem;
+		}
+
+		.policy-group ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.policy-group li {
+			margin-bottom: 1rem;
+			padding-left: 1.5rem;
+			position: relative;
+		}
+
+		.policy-group li::before {
+			content: "→";
+			position: absolute;
+			left: 0;
+			color: var(--sl-color-accent);
+		}
+
+		.policy-group a {
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.policy-group a:hover {
+			text-decoration: underline;
+		}
+
+		.description {
+			margin-top: 0.25rem;
+			font-size: 0.9rem;
+			color: var(--sl-color-gray-3);
+		}
+	</style>
+</StarlightPage>
