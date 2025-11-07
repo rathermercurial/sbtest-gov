@@ -620,11 +620,12 @@ starlight-theme-select select {
    Match left sidebar width for consistency
    ======================================== */
 
-/* Target the outer aside container for the right TOC */
+/* Override Starlight's calculated width with higher specificity */
 @media (min-width: 72rem) {
-	.right-sidebar-container {
-		width: var(--sl-sidebar-width) !important;
-		max-width: var(--sl-sidebar-width) !important;
+	aside.right-sidebar-container {
+		width: var(--sl-sidebar-width);
+		flex-basis: var(--sl-sidebar-width);
+		flex-grow: 0;
 		flex-shrink: 0;
 	}
 }
