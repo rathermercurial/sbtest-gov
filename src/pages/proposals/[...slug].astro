@@ -49,13 +49,34 @@ const shortenAddress = (address: string | undefined) => {
 ---
 
 <StarlightPage {frontmatter} headings={[]}>
+	{/* Proposal body content (converted from markdown to HTML) */}
+	{entry.body && (
+		<div class="sl-markdown-content" set:html={entry.body} />
+	)}
+
+	{!entry.body && (
+		<div style="
+			padding: 2rem;
+			background: var(--sl-color-gray-6, #23262f);
+			border-radius: 0.5rem;
+			text-align: center;
+			color: var(--sl-color-gray-3, #888c96);
+			margin-bottom: 2rem;
+		">
+			<p>No proposal content available.</p>
+			<p style="font-size: 0.875rem; margin-top: 0.5rem;">
+				This proposal may not have included a description, or the content could not be loaded.
+			</p>
+		</div>
+	)}
+
 	{entry.data.snapshotId && (
 		<div class="snapshot-metadata" style="
 			background: var(--sl-color-gray-6, #23262f);
 			border: 1px solid var(--sl-color-gray-5, #333741);
 			border-radius: 0.5rem;
 			padding: 1.5rem;
-			margin-bottom: 2rem;
+			margin-top: 2rem;
 		">
 			<div style="
 				background: var(--sl-color-accent-high, #0ea5e9);
@@ -281,26 +302,6 @@ const shortenAddress = (address: string | undefined) => {
 					</div>
 				)}
 			</div>
-		</div>
-	)}
-
-	{/* Proposal body content (converted from markdown to HTML) */}
-	{entry.body && (
-		<div class="sl-markdown-content" set:html={entry.body} />
-	)}
-
-	{!entry.body && (
-		<div style="
-			padding: 2rem;
-			background: var(--sl-color-gray-6, #23262f);
-			border-radius: 0.5rem;
-			text-align: center;
-			color: var(--sl-color-gray-3, #888c96);
-		">
-			<p>No proposal content available.</p>
-			<p style="font-size: 0.875rem; margin-top: 0.5rem;">
-				This proposal may not have included a description, or the content could not be loaded.
-			</p>
 		</div>
 	)}
 </StarlightPage>
