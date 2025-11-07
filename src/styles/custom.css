@@ -84,16 +84,16 @@
 /* Search button in light mode */
 button[data-open-modal],
 .search-button {
-	color: var(--sb-charcoal) !important;
-	border: none !important;
-	outline: none !important;
-	box-shadow: none !important;
-	background: transparent !important;
+	color: var(--sb-charcoal);
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background: transparent;
 }
 
 button[data-open-modal] svg,
 .search-button svg {
-	fill: var(--sb-charcoal) !important;
+	fill: var(--sb-charcoal);
 }
 
 /* Remove artifacts from search button text */
@@ -101,10 +101,10 @@ button[data-open-modal] span,
 .search-button span,
 button[data-open-modal] *,
 .search-button * {
-	border: none !important;
-	outline: none !important;
-	box-shadow: none !important;
-	background: transparent !important;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background: transparent;
 }
 
 /* Theme selector dropdown - light mode */
@@ -140,22 +140,22 @@ starlight-menu-button svg {
 /* Theme selector - add spacing between icon and text */
 starlight-theme-select select,
 .theme-select select {
-	display: flex !important;
-	align-items: center !important;
-	gap: var(--sb-space-3) !important;
-	padding-left: var(--sb-space-4) !important;
+	display: flex;
+	align-items: center;
+	gap: var(--sb-space-3);
+	padding-left: var(--sb-space-4);
 }
 
 starlight-theme-select svg,
 .theme-select svg {
-	margin-right: var(--sb-space-3) !important;
+	margin-right: var(--sb-space-3);
 }
 
 /* Force spacing in theme select label/container */
 starlight-theme-select label,
 .theme-select label,
 starlight-theme-select {
-	gap: var(--sb-space-3) !important;
+	gap: var(--sb-space-3);
 }
 
 /* Site title link - light mode */
@@ -237,15 +237,15 @@ aside.right-sidebar,
 .sl-container aside,
 aside[aria-labelledby="starlight__on-this-page"],
 .starlight-aside {
-	width: 16rem !important;
-	max-width: 16rem !important;
-	flex-basis: 16rem !important;
-	min-width: 16rem !important;
+	width: 16rem;
+	max-width: 16rem;
+	flex-basis: 16rem;
+	min-width: 16rem;
 }
 
 /* Adjust main content grid to accommodate narrower right sidebar */
 .sl-container {
-	--sl-sidebar-width: 16rem !important;
+	--sl-sidebar-width: 16rem;
 }
 
 /* Target Starlight's CSS variables for right sidebar */
@@ -258,8 +258,8 @@ aside[aria-labelledby="starlight__on-this-page"],
 	.right-sidebar,
 	aside.right-sidebar,
 	aside[aria-labelledby="starlight__on-this-page"] {
-		width: 16rem !important;
-		max-width: 16rem !important;
+		width: 16rem;
+		max-width: 16rem;
 	}
 }
 
@@ -442,16 +442,16 @@ aside[aria-labelledby="starlight__on-this-page"],
 	/* Search button/icon */
 	button[data-open-modal],
 	.search-button {
-		color: var(--sb-dark) !important;
-		border: none !important;
-		outline: none !important;
-		box-shadow: none !important;
-		background: transparent !important;
+		color: var(--sb-dark);
+		border: none;
+		outline: none;
+		box-shadow: none;
+		background: transparent;
 	}
 
 	button[data-open-modal] svg,
 	.search-button svg {
-		fill: var(--sb-dark) !important;
+		fill: var(--sb-dark);
 	}
 
 	/* Remove artifacts from search button text in dark mode */
@@ -459,10 +459,10 @@ aside[aria-labelledby="starlight__on-this-page"],
 	.search-button span,
 	button[data-open-modal] *,
 	.search-button * {
-		border: none !important;
-		outline: none !important;
-		box-shadow: none !important;
-		background: transparent !important;
+		border: none;
+		outline: none;
+		box-shadow: none;
+		background: transparent;
 	}
 
 	/* Dropdown menus */
@@ -500,7 +500,7 @@ aside[aria-labelledby="starlight__on-this-page"],
 
 	/* Site title link */
 	.site-title a {
-		color: var(--sb-dark) !important;
+		color: var(--sb-dark);
 	}
 
 	/* Theme select dropdown */
