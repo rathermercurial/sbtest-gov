@@ -65,6 +65,89 @@
    COMPONENT CUSTOMIZATION
    ======================================== */
 
+/* Header text in light mode - ensure dark text for contrast */
+.header a,
+.header button,
+.site-title,
+.header label,
+.theme-toggle,
+.social-icons a {
+	color: var(--sb-charcoal);
+}
+
+.header svg,
+.theme-toggle svg,
+.social-icons svg {
+	fill: var(--sb-charcoal);
+}
+
+/* Search button in light mode */
+button[data-open-modal],
+.search-button {
+	color: var(--sb-charcoal);
+}
+
+button[data-open-modal] svg,
+.search-button svg {
+	fill: var(--sb-charcoal);
+}
+
+/* Theme selector dropdown - light mode */
+starlight-theme-select select,
+.theme-select select,
+select[aria-label*="theme" i],
+select[aria-label*="Theme" i] {
+	background-color: var(--sb-surface);
+	color: var(--sb-charcoal);
+	border: 1px solid var(--sb-border);
+	padding: var(--sb-space-2) var(--sb-space-3);
+	border-radius: var(--sb-radius-md);
+}
+
+starlight-theme-select select option,
+.theme-select select option {
+	background-color: var(--sb-surface);
+	color: var(--sb-charcoal);
+}
+
+/* Starlight custom elements in light mode */
+starlight-theme-select,
+starlight-menu-button,
+starlight-lang-select {
+	color: var(--sb-charcoal);
+}
+
+starlight-theme-select svg,
+starlight-menu-button svg {
+	fill: var(--sb-charcoal);
+}
+
+/* Site title link - light mode */
+.site-title a {
+	color: var(--sb-charcoal);
+}
+
+/* Keyboard shortcut hints - light mode */
+.search kbd,
+button[data-open-modal] kbd {
+	background-color: var(--sb-cream);
+	border: 1px solid var(--sb-border);
+	color: var(--sb-darkgray);
+}
+
+/* Search input - light mode */
+.search-input,
+input[type="search"] {
+	background-color: var(--sb-surface);
+	border: 1px solid var(--sb-border);
+	color: var(--sb-charcoal);
+}
+
+.search-input::placeholder,
+input[type="search"]::placeholder {
+	color: var(--sb-gray);
+}
+
 /* Card Enhancements */
 .sl-card,
 .card {
@@ -342,6 +425,29 @@ code {
 	.theme-select,
 	.theme-select button {
 		color: var(--sb-dark);
+	}
+
+	/* Theme selector dropdown options - dark mode */
+	starlight-theme-select select,
+	.theme-select select,
+	select[aria-label*="theme" i],
+	select[aria-label*="Theme" i] {
+		background-color: var(--sb-surface);
+		color: var(--sb-dark);
+		border-color: var(--sb-border);
+	}
+
+	starlight-theme-select select option,
+	.theme-select select option {
+		background-color: var(--sb-surface);
+		color: var(--sb-dark);
+	}
+
+	/* Dropdown menu when opened */
+	starlight-theme-select select:focus,
+	.theme-select select:focus {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-primary);
 	}
 
 	/* Language picker */
