@@ -59,15 +59,16 @@ const formatFolderName = (folder: string) => {
 		{Object.entries(groupedPolicies).sort().map(([folder, items]) => (
 			<div class="policy-group">
 				<h3>{formatFolderName(folder)}</h3>
-				<ul>
+				<div class="card-grid">
 					{items.map(policy => (
-						<li>
-							<a href={`/policies/${policy.id}/`}>
-								{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}
-							</a>
-						</li>
+						<a href={`/policies/${policy.id}/`} class="card">
+							<h4>{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}</h4>
+							{policy.data.description && (
+								<p>{policy.data.description}</p>
+							)}
+						</a>
 					))}
-				</ul>
+				</div>
 			</div>
 		))}
 	</div>
@@ -80,38 +81,47 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.policy-group {
-			margin-bottom: 2rem;
+			margin-bottom: 3rem;
 		}
 
 		.policy-group h3 {
-			margin-top: 1.5rem;
-			margin-bottom: 0.75rem;
+			margin-top: 2rem;
+			margin-bottom: 1rem;
 		}
 
-		.policy-group ul {
-			list-style: none;
-			padding-left: 0;
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 1.5rem;
+			margin: 1rem 0 2rem;
 		}
 
-		.policy-group li {
-			margin-bottom: 0.5rem;
-			padding-left: 1.5rem;
-			position: relative;
-		}
-
-		.policy-group li::before {
-			content: "→";
-			position: absolute;
-			left: 0;
-			color: var(--sl-color-accent);
-		}
-
-		.policy-group a {
+		.card {
+			display: block;
+			padding: 1.5rem;
+			border: 1px solid var(--sl-color-gray-5);
+			border-radius: 0.5rem;
 			text-decoration: none;
+			color: var(--sl-color-text);
+			transition: border-color 0.2s, box-shadow 0.2s;
 		}
 
-		.policy-group a:hover {
-			text-decoration: underline;
+		.card:hover {
+			border-color: var(--sl-color-accent);
+			box-shadow: 0 0 0 1px var(--sl-color-accent);
+		}
+
+		.card h4 {
+			margin-top: 0;
+			margin-bottom: 0.5rem;
+			color: var(--sl-color-white);
+		}
+
+		.card p {
+			margin: 0;
+			font-size: 0.9rem;
+			line-height: 1.5;
+			color: var(--sl-color-gray-2);
 		}
 	</style>
 </StarlightPage>

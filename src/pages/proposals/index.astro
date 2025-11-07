@@ -57,15 +57,16 @@ const sortedProposals = proposals.sort((a, b) => {
 				No proposals have been archived yet. This collection will grow as governance decisions are documented.
 			</p>
 		) : (
-			<ul class="proposals-list">
+			<div class="card-grid">
 				{sortedProposals.map(proposal => (
-					<li>
-						<a href={`/proposals/${proposal.id}/`}>
-							{proposal.data.title || proposal.id.replace('.md', '')}
-						</a>
-					</li>
+					<a href={`/proposals/${proposal.id}/`} class="card">
+						<h4>{proposal.data.title || proposal.id.replace('.md', '')}</h4>
+						{proposal.data.description && (
+							<p>{proposal.data.description}</p>
+						)}
+					</a>
 				))}
-			</ul>
+			</div>
 		)}
 	</div>
 
@@ -84,30 +85,39 @@ const sortedProposals = proposals.sort((a, b) => {
 			color: var(--sl-color-gray-2);
 		}
 
-		.proposals-list {
-			list-style: none;
-			padding-left: 0;
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 1.5rem;
+			margin: 1rem 0 2rem;
 		}
 
-		.proposals-list li {
-			margin-bottom: 0.5rem;
-			padding-left: 1.5rem;
-			position: relative;
-		}
-
-		.proposals-list li::before {
-			content: "→";
-			position: absolute;
-			left: 0;
-			color: var(--sl-color-accent);
-		}
-
-		.proposals-list a {
+		.card {
+			display: block;
+			padding: 1.5rem;
+			border: 1px solid var(--sl-color-gray-5);
+			border-radius: 0.5rem;
 			text-decoration: none;
+			color: var(--sl-color-text);
+			transition: border-color 0.2s, box-shadow 0.2s;
 		}
 
-		.proposals-list a:hover {
-			text-decoration: underline;
+		.card:hover {
+			border-color: var(--sl-color-accent);
+			box-shadow: 0 0 0 1px var(--sl-color-accent);
+		}
+
+		.card h4 {
+			margin-top: 0;
+			margin-bottom: 0.5rem;
+			color: var(--sl-color-white);
+		}
+
+		.card p {
+			margin: 0;
+			font-size: 0.9rem;
+			line-height: 1.5;
+			color: var(--sl-color-gray-2);
 		}
 	</style>
 </StarlightPage>
