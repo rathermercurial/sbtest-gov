@@ -1,6 +1,35 @@
 ---
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { readFile } from 'node:fs/promises';
+import { Marked } from 'marked';
+
+// Read and parse the index.md file from the governance submodule
+const indexPath = './src/content/governance/policies/index.md';
+const indexContent = await readFile(indexPath, 'utf-8');
+
+// Extract frontmatter
+const frontmatterMatch = indexContent.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+let description = 'Practical coordination mechanisms across different operational domains';
+let markdownContent = indexContent;
+
+if (frontmatterMatch) {
+	const frontmatter = frontmatterMatch[1];
+	markdownContent = frontmatterMatch[2];
+	const descMatch = frontmatter.match(/description:\s*(.+)/);
+	if (descMatch) {
+		description = descMatch[1];
+	}
+}
+
+// Get title from first H1 and remove it from content
+const titleMatch = markdownContent.match(/^#\s+(.+)$/m);
+const title = titleMatch ? titleMatch[1] : 'Policies';
+const contentWithoutTitle = markdownContent.replace(/^#\s+.+$/m, '').trim();
+
+// Render markdown to HTML
+const marked = new Marked();
+const renderedContent = await marked.parse(contentWithoutTitle);
 
 // Get all policies and group by folder
 const policies = await getCollection('policies');
@@ -20,29 +49,22 @@ const formatFolderName = (folder: string) => {
 };
 ---
 
-<StarlightPage
-	frontmatter={{
-		title: 'Policies',
-		description: 'Practical coordination mechanisms across different operational domains',
-	}}
->
+<StarlightPage frontmatter={{ title, description }}>
 	<div class="sl-markdown-content">
-		<p class="lead">
-			Policies define practical coordination mechanisms across different operational domains within SuperBenefit DAO.
-		</p>
+		<div set:html={renderedContent} />
 
+		<hr />
+
+		<h2>Browse All Policies</h2>
 		{Object.entries(groupedPolicies).sort().map(([folder, items]) => (
 			<div class="policy-group">
-				<h2>{formatFolderName(folder)}</h2>
+				<h3>{formatFolderName(folder)}</h3>
 				<ul>
 					{items.map(policy => (
 						<li>
 							<a href={`/policies/${policy.id}/`}>
 								{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}
 							</a>
-							{policy.data.description && (
-								<p class="description">{policy.data.description}</p>
-							)}
 						</li>
 					))}
 				</ul>
@@ -51,19 +73,19 @@ const formatFolderName = (folder: string) => {
 	</div>
 
 	<style>
-		.lead {
-			font-size: 1.25rem;
-			line-height: 1.6;
-			margin-bottom: 2rem;
+		hr {
+			margin: 3rem 0;
+			border: none;
+			border-top: 1px solid var(--sl-color-gray-5);
 		}
 
 		.policy-group {
 			margin-bottom: 2rem;
 		}
 
-		.policy-group h2 {
-			margin-top: 2rem;
-			margin-bottom: 1rem;
+		.policy-group h3 {
+			margin-top: 1.5rem;
+			margin-bottom: 0.75rem;
 		}
 
 		.policy-group ul {
@@ -72,7 +94,7 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.policy-group li {
-			margin-bottom: 1rem;
+			margin-bottom: 0.5rem;
 			padding-left: 1.5rem;
 			position: relative;
 		}
@@ -85,18 +107,11 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.policy-group a {
-			font-weight: 600;
 			text-decoration: none;
 		}
 
 		.policy-group a:hover {
 			text-decoration: underline;
-		}
-
-		.description {
-			margin-top: 0.25rem;
-			font-size: 0.9rem;
-			color: var(--sl-color-gray-3);
 		}
 	</style>
 </StarlightPage>

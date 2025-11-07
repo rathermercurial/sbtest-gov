@@ -1,11 +1,38 @@
 ---
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { readFile } from 'node:fs/promises';
+import { Marked } from 'marked';
 
-// Get all agreements and group by folder
+// Read and parse the index.md file from the governance submodule
+const indexPath = './src/content/governance/agreements/index.md';
+const indexContent = await readFile(indexPath, 'utf-8');
+
+// Extract frontmatter
+const frontmatterMatch = indexContent.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+let description = 'Relational foundations and core agreements';
+let markdownContent = indexContent;
+
+if (frontmatterMatch) {
+	const frontmatter = frontmatterMatch[1];
+	markdownContent = frontmatterMatch[2];
+	const descMatch = frontmatter.match(/description:\s*(.+)/);
+	if (descMatch) {
+		description = descMatch[1];
+	}
+}
+
+// Get title from first H1 and remove it from content
+const titleMatch = markdownContent.match(/^#\s+(.+)$/m);
+const title = titleMatch ? titleMatch[1] : 'Agreements';
+const contentWithoutTitle = markdownContent.replace(/^#\s+.+$/m, '').trim();
+
+// Render markdown to HTML
+const marked = new Marked();
+const renderedContent = await marked.parse(contentWithoutTitle);
+
+// Get all agreements for directory listing
 const agreements = await getCollection('agreements');
-
-// Group by first folder segment
 const groupedAgreements: Record<string, typeof agreements> = {};
 agreements.forEach(agreement => {
 	const folder = agreement.id.split('/')[0] || 'other';
@@ -20,29 +47,22 @@ const formatFolderName = (folder: string) => {
 };
 ---
 
-<StarlightPage
-	frontmatter={{
-		title: 'Agreements',
-		description: 'Relational foundations and core agreements that define how community members work together',
-	}}
->
+<StarlightPage frontmatter={{ title, description }}>
 	<div class="sl-markdown-content">
-		<p class="lead">
-			Agreements define the relational foundations and core commitments that guide how SuperBenefit DAO community members work together.
-		</p>
+		<div set:html={renderedContent} />
 
+		<hr />
+
+		<h2>Browse All Agreements</h2>
 		{Object.entries(groupedAgreements).sort().map(([folder, items]) => (
 			<div class="agreement-group">
-				<h2>{formatFolderName(folder)}</h2>
+				<h3>{formatFolderName(folder)}</h3>
 				<ul>
 					{items.map(agreement => (
 						<li>
 							<a href={`/agreements/${agreement.id}/`}>
 								{agreement.data.title || agreement.id.split('/').pop()?.replace('.md', '')}
 							</a>
-							{agreement.data.description && (
-								<p class="description">{agreement.data.description}</p>
-							)}
 						</li>
 					))}
 				</ul>
@@ -51,19 +71,19 @@ const formatFolderName = (folder: string) => {
 	</div>
 
 	<style>
-		.lead {
-			font-size: 1.25rem;
-			line-height: 1.6;
-			margin-bottom: 2rem;
+		hr {
+			margin: 3rem 0;
+			border: none;
+			border-top: 1px solid var(--sl-color-gray-5);
 		}
 
 		.agreement-group {
 			margin-bottom: 2rem;
 		}
 
-		.agreement-group h2 {
-			margin-top: 2rem;
-			margin-bottom: 1rem;
+		.agreement-group h3 {
+			margin-top: 1.5rem;
+			margin-bottom: 0.75rem;
 		}
 
 		.agreement-group ul {
@@ -72,7 +92,7 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.agreement-group li {
-			margin-bottom: 1rem;
+			margin-bottom: 0.5rem;
 			padding-left: 1.5rem;
 			position: relative;
 		}
@@ -85,18 +105,11 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.agreement-group a {
-			font-weight: 600;
 			text-decoration: none;
 		}
 
 		.agreement-group a:hover {
 			text-decoration: underline;
-		}
-
-		.description {
-			margin-top: 0.25rem;
-			font-size: 0.9rem;
-			color: var(--sl-color-gray-3);
 		}
 	</style>
 </StarlightPage>
