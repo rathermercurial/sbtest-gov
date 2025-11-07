@@ -2,9 +2,13 @@
 
 **Workstream**: WS4: Design & Polish
 **Branch**: `claude/design-polish-011CUsnQ9fg8gXD2wv6e52SL`
-**Status**: Planning Phase (Revised)
+**Status**: Planning Phase - Design System Validated
 **Updated**: 2025-11-07
-**Revision**: Added Phase 4 for Navigation & Sidebar styling
+**Revisions**:
+- Added Phase 4 for Navigation & Sidebar styling
+- Added Design System Implementation Details section
+- Mapped SuperBenefit tokens to Starlight CSS variables
+- Defined font loading strategy and status badge colors
 
 ## Overview
 
@@ -48,7 +52,10 @@ This workstream focuses on customizing the SuperBenefit DAO Governance Site visu
 - ⏳ **WS3 merged to main** (navigation config with custom sidebar)
 - ⏳ `temp/design-system.md` (to be provided by user)
 
-**Note**: WS3 establishes the navigation structure and basic styling. WS4 will enhance and polish the navigation design with brand colors, typography, and refined interactions.
+**Notes**:
+- WS3 establishes the navigation structure and basic styling
+- WS4 will enhance and polish the navigation design with brand colors, typography, and refined interactions
+- Design system (temp/design-system.md) is available with comprehensive brand specifications
 
 ## Implementation Phases
 
@@ -363,6 +370,117 @@ This workstream focuses on customizing the SuperBenefit DAO Governance Site visu
 
 ---
 
+## Design System Implementation Details
+
+### SuperBenefit Brand Tokens (from temp/design-system.md)
+
+**Color Palette:**
+- Primary: Sage (#7FA568) - Used for links, primary actions, emphasis
+- Secondary: Orange (#EA8D3C) - Used for secondary actions, highlights
+- Tertiary: Rust (#D04A26) - Used for warnings, hot actions
+- Neutrals: Cream (#F5D5B3), Charcoal (#2F2F2F)
+- Full derived palette with light/dark variations
+
+**Typography:**
+- Headers: Schibsted Grotesk (needs Google Fonts)
+- Body: Source Sans Pro (needs Google Fonts)
+- Code: IBM Plex Mono (needs Google Fonts)
+- Display: MapleMono (check availability)
+
+**Component Tokens:**
+- Spacing: 4px base unit (0.25rem)
+- Border radius: 4px (sm) to 16px (2xl)
+- Shadows: Based on charcoal with varying opacity
+- Transitions: 150ms (fast) to 500ms (slower)
+
+### Mapping to Starlight CSS Variables
+
+Starlight uses specific CSS custom properties that we'll override:
+
+```css
+:root {
+  /* Accent colors - Map to Sage */
+  --sl-color-accent-low: #C5D4BA;      /* sage-pale */
+  --sl-color-accent: #7FA568;          /* sage primary */
+  --sl-color-accent-high: #628249;     /* sage-dark */
+
+  /* Gray scale - Map to Charcoal derivatives */
+  --sl-color-gray-1: #FDFBF8;          /* surface (lightest) */
+  --sl-color-gray-2: #F5D5B3;          /* cream */
+  --sl-color-gray-3: #A8A8A8;          /* lightgray */
+  --sl-color-gray-4: #6B6B6B;          /* gray */
+  --sl-color-gray-5: #4A4A4A;          /* darkgray */
+  --sl-color-gray-6: #2F2F2F;          /* charcoal (darkest) */
+
+  /* Typography */
+  --sl-font: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sl-font-system: "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Additional SuperBenefit tokens */
+  --sb-primary: #7FA568;
+  --sb-secondary: #EA8D3C;
+  --sb-tertiary: #D04A26;
+  /* ... (full palette as defined in design-system.md) */
+}
+```
+
+### Font Loading Strategy
+
+**Approach**: Use Google Fonts CDN for initial implementation
+
+```html
+<!-- Add to astro.config.mjs head or custom Head component -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+```
+
+**MapleMono**: Check if available, otherwise use IBM Plex Mono as fallback
+
+### Status Badge Color Mapping
+
+Current badges (draft/active/deprecated) → New palette:
+
+```css
+.status-draft {
+  background: var(--text-highlight);     /* Orange at 10% opacity */
+  color: var(--tertiary);                /* Rust */
+}
+
+.status-active {
+  background: var(--highlight);          /* Sage at 15% opacity */
+  color: var(--primary-dark);            /* Sage dark */
+}
+
+.status-deprecated {
+  background: var(--border);             /* Light gray */
+  color: var(--gray);                    /* Medium gray */
+}
+```
+
+### File Organization
+
+Given the comprehensive design system, we'll organize CSS as:
+
+```
+src/styles/
+├── design-tokens.css    # NEW: All SuperBenefit CSS variables from design-system.md
+├── custom.css           # Existing from WS3, extend with Starlight overrides
+└── components.css       # Optional: Component-specific styles
+```
+
+**design-tokens.css**: Contains all the CSS variables from the design system
+**custom.css**: Maps design tokens to Starlight variables + navigation styling
+
+### Dark Mode Handling
+
+The design system includes dark mode specifications. Starlight has built-in dark mode, so we'll:
+1. Use Starlight's `[data-theme="dark"]` selector (or their equivalent)
+2. Apply dark mode color overrides from design-system.md
+3. Test all components in both themes
+
+---
+
 ## File Changes Summary
 
 ### Files from WS3 (Already Exist):
@@ -374,6 +492,7 @@ astro.config.mjs                           # Modified by WS3, may add more confi
 
 ### New Files to Create:
 ```
+src/styles/design-tokens.css       # All SuperBenefit CSS variables from design-system.md
 src/styles/components.css          # Component-specific styles (optional)
 src/components/StatusBadge.astro   # Reusable status badge (optional)
 src/assets/logo.svg                # SuperBenefit logo (if provided)
@@ -381,10 +500,11 @@ src/assets/logo.svg                # SuperBenefit logo (if provided)
 
 ### Files to Modify:
 ```
-src/styles/custom.css                       # Extend with theme colors, fonts, navigation polish
+src/styles/custom.css                       # Extend with Starlight variable mapping + navigation polish
 src/components/starlight/Sidebar.astro      # Add classes/markup if needed for styling
 src/content/docs/index.mdx                  # Landing page visual enhancements
-src/components/CollectionList.astro         # Style improvements and polish
+src/components/CollectionList.astro         # Update status badges with new colors
+astro.config.mjs                            # Add design-tokens.css to customCss array
 public/favicon.svg                          # Replace with brand favicon
 ```
 
@@ -462,9 +582,11 @@ public/og-image.png                # Social sharing image (optional)
 
 ## Notes
 
-- **Dependency on Design System**: Cannot proceed with full implementation until `temp/design-system.md` is available
+- ✅ **Design System Available**: `temp/design-system.md` provides comprehensive brand specifications
+- **Implementation Strategy**: Create design-tokens.css first, then map to Starlight variables
+- **Font Loading**: Use Google Fonts CDN for Schibsted Grotesk, Source Sans Pro, and IBM Plex Mono
+- **Color Mapping**: Sage → Starlight accent, Charcoal derivatives → Starlight grays
 - **Iterative Approach**: Design can be refined based on feedback
-- **Minimal Dependencies**: This workstream is largely independent and can proceed once design system is defined
 - **Quality Over Speed**: Focus on getting design right rather than rushing
 - **Document Decisions**: Document any design decisions or deviations from the design system
 
@@ -473,12 +595,14 @@ public/og-image.png                # Social sharing image (optional)
 ## Next Steps
 
 1. ✅ Review this plan
-2. ⏳ Await `temp/design-system.md` from user
-3. ⏳ Begin Phase 1 implementation
-4. ⏳ Iterate through phases with testing
-5. ⏳ Commit and push to branch
-6. ⏳ Create PR for review
+2. ✅ Review `temp/design-system.md` (complete)
+3. ✅ Validate design system and update plan (complete)
+4. ⏳ Await WS3 merge to main
+5. ⏳ Begin Phase 1 implementation
+6. ⏳ Iterate through phases with testing
+7. ⏳ Commit and push to branch
+8. ⏳ Create PR for review
 
 ---
 
-**Status**: Ready for design system input and implementation to begin.
+**Status**: Design system validated. Ready to begin implementation once WS3 is merged to main.
