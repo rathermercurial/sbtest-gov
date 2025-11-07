@@ -48,7 +48,7 @@ const shortenAddress = (address: string | undefined) => {
 };
 ---
 
-<StarlightPage {frontmatter} {headings}>
+<StarlightPage {frontmatter} headings={[]}>
 	{entry.data.snapshotId && (
 		<div class="snapshot-metadata" style="
 			background: var(--sl-color-gray-6, #23262f);
