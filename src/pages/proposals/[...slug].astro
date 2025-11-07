@@ -286,14 +286,23 @@ const shortenAddress = (address: string | undefined) => {
 
 	<div class="proposal-content">
 		<Content />
+
+		{/* Fallback: If Content component doesn't render, try raw body */}
+		{entry.body && (
+			<div class="proposal-body-fallback" set:html={entry.body} />
+		)}
 	</div>
 
-	{/* Debug: Show if there's no content */}
-	<script>
+	{/* Debug: Show content information */}
+	<script define:vars={{ hasBody: !!entry.body, bodyLength: entry.body?.length || 0 }}>
+		console.log('Entry has body:', hasBody);
+		console.log('Body length:', bodyLength);
+
 		document.addEventListener('DOMContentLoaded', () => {
 			const content = document.querySelector('.proposal-content');
 			if (content && content.textContent.trim().length === 0) {
 				console.warn('Proposal content is empty');
+				console.warn('This might mean the body is HTML that needs to be rendered differently');
 			}
 		});
 	</script>
