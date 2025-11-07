@@ -220,7 +220,7 @@ To reduce API calls and improve build times, implement caching:
 import fs from 'fs/promises';
 import path from 'path';
 
-const CACHE_FILE = path.join(process.cwd(), '.snapshot-cache.json');
+const CACHE_FILE = path.join(process.cwd(), 'src/.snapshot-cache.json');
 const CACHE_TTL = 3600000; // 1 hour in milliseconds
 
 async function getCachedProposals(space: string): Promise<SnapshotProposal[] | null> {

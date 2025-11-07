@@ -16,7 +16,7 @@
  * - Returns typed entries for Astro content collections
  *
  * Caching:
- * - Cache stored in .snapshot-cache.json (gitignored)
+ * - Cache stored in src/.snapshot-cache.json (gitignored)
  * - Uses proposal ID + end timestamp + state for cache validation
  * - Closed proposals are immutable - safe to cache indefinitely
  * - Skips expensive markdown conversion for cached proposals
@@ -36,7 +36,7 @@ import path from 'path';
 
 const SNAPSHOT_GRAPHQL_ENDPOINT = 'https://hub.snapshot.org/graphql';
 const SNAPSHOT_SPACE = 'superbenefit.eth';
-const CACHE_FILE = '.snapshot-cache.json';
+const CACHE_FILE = 'src/.snapshot-cache.json';
 
 /**
  * GraphQL query to fetch proposals from Snapshot

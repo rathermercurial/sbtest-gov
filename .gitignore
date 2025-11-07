@@ -24,4 +24,4 @@ pnpm-debug.log*
 .claude/
 
 # Snapshot proposal cache
-.snapshot-cache.json
+src/.snapshot-cache.json
