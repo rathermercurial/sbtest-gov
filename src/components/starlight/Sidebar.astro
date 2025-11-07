@@ -83,7 +83,7 @@ const currentPath = Astro.url.pathname;
 					{Object.entries(agreementsTree).map(([groupKey, items]) => (
 						groupKey === '_root' ? (
 							items.map(entry => (
-								<li>
+								<li class="page-item">
 									<a
 										href={`/agreements/${entry.id}/`}
 										aria-current={currentPath === `/agreements/${entry.id}/` ? 'page' : 'false'}
@@ -93,17 +93,16 @@ const currentPath = Astro.url.pathname;
 								</li>
 							))
 						) : (
-							<li>
+							<li class="folder-item">
 								<details open>
 									<summary>
 										<span class="group-label">
 											<span>{formatGroupName(groupKey)}</span>
 										</span>
-										<Icon name="right-caret" class="caret" size="1.25rem" />
 									</summary>
 									<ul>
 										{items.map(entry => (
-											<li>
+											<li class="page-item">
 												<a
 													href={`/agreements/${entry.id}/`}
 													aria-current={currentPath === `/agreements/${entry.id}/` ? 'page' : 'false'}
@@ -138,7 +137,7 @@ const currentPath = Astro.url.pathname;
 					{Object.entries(policiesTree).map(([groupKey, items]) => (
 						groupKey === '_root' ? (
 							items.map(entry => (
-								<li>
+								<li class="page-item">
 									<a
 										href={`/policies/${entry.id}/`}
 										aria-current={currentPath === `/policies/${entry.id}/` ? 'page' : 'false'}
@@ -148,17 +147,16 @@ const currentPath = Astro.url.pathname;
 								</li>
 							))
 						) : (
-							<li>
+							<li class="folder-item">
 								<details open>
 									<summary>
 										<span class="group-label">
 											<span>{formatGroupName(groupKey)}</span>
 										</span>
-										<Icon name="right-caret" class="caret" size="1.25rem" />
 									</summary>
 									<ul>
 										{items.map(entry => (
-											<li>
+											<li class="page-item">
 												<a
 													href={`/policies/${entry.id}/`}
 													aria-current={currentPath === `/policies/${entry.id}/` ? 'page' : 'false'}
@@ -193,7 +191,7 @@ const currentPath = Astro.url.pathname;
 					{Object.entries(proposalsTree).map(([groupKey, items]) => (
 						groupKey === '_root' ? (
 							items.map(entry => (
-								<li>
+								<li class="page-item">
 									<a
 										href={`/proposals/${entry.id}/`}
 										aria-current={currentPath === `/proposals/${entry.id}/` ? 'page' : 'false'}
@@ -203,17 +201,16 @@ const currentPath = Astro.url.pathname;
 								</li>
 							))
 						) : (
-							<li>
+							<li class="folder-item">
 								<details open>
 									<summary>
 										<span class="group-label">
 											<span>{formatGroupName(groupKey)}</span>
 										</span>
-										<Icon name="right-caret" class="caret" size="1.25rem" />
 									</summary>
 									<ul>
 										{items.map(entry => (
-											<li>
+											<li class="page-item">
 												<a
 													href={`/proposals/${entry.id}/`}
 													aria-current={currentPath === `/proposals/${entry.id}/` ? 'page' : 'false'}
@@ -289,6 +286,16 @@ const currentPath = Astro.url.pathname;
 
 	.top-level-item > details > summary .large {
 		font-weight: 600 !important;
+	}
+
+	/* Folder vs Page styling - folders should not have bullets, pages should */
+	.folder-item {
+		list-style: none !important;
+		margin-left: -1.25rem !important; /* Shift left to compensate for no bullet */
+	}
+
+	.page-item {
+		list-style: disc !important; /* Ensure pages have bullets */
 	}
 
 	/* Reference section styling (de-emphasized) */
