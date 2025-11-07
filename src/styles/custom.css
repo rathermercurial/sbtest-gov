@@ -367,7 +367,6 @@ starlight-theme-select select {
 .sidebar-content a[aria-current="page"]:link,
 .sidebar-content a[aria-current="page"]:visited {
 	color: var(--sb-rust);
-	border-left: 3px solid var(--sb-rust);
 	text-decoration-color: var(--sb-rust);
 }
 
@@ -604,7 +603,6 @@ starlight-theme-select select {
 	.sidebar-content a[aria-current="page"]:link,
 	.sidebar-content a[aria-current="page"]:visited {
 		color: var(--sb-secondary);
-		border-left: 3px solid var(--sb-secondary);
 		text-decoration-color: var(--sb-secondary);
 	}
 
