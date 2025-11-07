@@ -260,17 +260,6 @@ starlight-theme-select select {
 	padding-inline-end: calc(var(--sl-caret-size, 1.25rem) + 1rem);
 }
 
-/* Right Sidebar (Table of Contents) - Make narrower to match left sidebar */
-.right-sidebar-panel .sl-container {
-	width: 16rem;
-}
-
-@media (min-width: 72rem) {
-	.right-sidebar-panel .sl-container {
-		max-width: 16rem;
-	}
-}
-
 /* ========================================
    HERO / SPLASH PAGE STYLING
    ======================================== */
