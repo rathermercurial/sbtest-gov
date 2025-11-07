@@ -279,6 +279,13 @@ const currentPath = Astro.url.pathname;
 		font-weight: 600 !important;
 	}
 
+	/* Ensure adequate touch targets on mobile for top-level folder links */
+	.top-level-item > details > summary a {
+		display: inline-block;
+		min-height: 44px; /* Minimum touch target height */
+		line-height: 44px;
+	}
+
 	/* Folder vs Page styling - folders should not have bullets, pages should */
 	.folder-item {
 		list-style: none !important;
@@ -309,6 +316,24 @@ const currentPath = Astro.url.pathname;
 	.reference-section summary:hover,
 	.reference-section a:hover {
 		opacity: 1 !important;
+	}
+
+	/* Mobile-specific adjustments */
+	@media (max-width: 768px) {
+		/* Reduce folder negative margin on small screens to prevent cutoff */
+		.folder-item {
+			margin-left: -0.75rem !important;
+		}
+
+		/* Slightly reduce spacing between top-level items on mobile */
+		.top-level-item {
+			margin-bottom: 1.25rem !important;
+		}
+
+		/* Reduce folder spacing on mobile */
+		.folder-item {
+			margin-bottom: 0.5rem !important;
+		}
 	}
 </style>
 
