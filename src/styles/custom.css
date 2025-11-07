@@ -548,15 +548,15 @@ starlight-theme-select select {
 		fill: var(--sb-dark);
 	}
 
-	/* Menu button (mobile) */
+	/* Menu button (mobile) - increased contrast for dark mode */
 	starlight-menu-button,
 	.mobile-menu-toggle button {
-		color: var(--sb-dark);
+		color: #FFFFFF;
 	}
 
 	starlight-menu-button svg,
 	.mobile-menu-toggle svg {
-		fill: var(--sb-dark);
+		fill: #FFFFFF;
 	}
 
 	/* Search component */
