@@ -85,11 +85,22 @@
 button[data-open-modal],
 .search-button {
 	color: var(--sb-charcoal);
+	border: none;
+	outline: none;
+	box-shadow: none;
 }
 
 button[data-open-modal] svg,
 .search-button svg {
 	fill: var(--sb-charcoal);
+}
+
+/* Remove artifacts from search button text */
+button[data-open-modal] span,
+.search-button span {
+	border: none;
+	outline: none;
+	box-shadow: none;
 }
 
 /* Theme selector dropdown - light mode */
@@ -120,6 +131,19 @@ starlight-lang-select {
 starlight-theme-select svg,
 starlight-menu-button svg {
 	fill: var(--sb-charcoal);
+}
+
+/* Theme selector - add spacing between icon and text */
+starlight-theme-select select,
+.theme-select select {
+	display: flex;
+	align-items: center;
+	gap: var(--sb-space-2);
+}
+
+starlight-theme-select svg,
+.theme-select svg {
+	margin-right: var(--sb-space-2);
 }
 
 /* Site title link - light mode */
@@ -193,6 +217,28 @@ code {
   outline: 2px solid var(--sb-primary);
   outline-offset: 2px;
   border-radius: var(--sb-radius-sm);
+}
+
+/* Right sidebar (Table of Contents) - make narrower */
+.right-sidebar,
+aside.right-sidebar,
+.sl-container aside {
+	width: 16rem;
+	max-width: 16rem;
+	flex-basis: 16rem;
+}
+
+/* Adjust main content grid to accommodate narrower right sidebar */
+.sl-container {
+	--sl-sidebar-width: 16rem;
+}
+
+@media (min-width: 90rem) {
+	.right-sidebar,
+	aside.right-sidebar {
+		width: 16rem;
+		max-width: 16rem;
+	}
 }
 
 /* ========================================
@@ -375,11 +421,22 @@ code {
 	button[data-open-modal],
 	.search-button {
 		color: var(--sb-dark);
+		border: none;
+		outline: none;
+		box-shadow: none;
 	}
 
 	button[data-open-modal] svg,
 	.search-button svg {
 		fill: var(--sb-dark);
+	}
+
+	/* Remove artifacts from search button text in dark mode */
+	button[data-open-modal] span,
+	.search-button span {
+		border: none;
+		outline: none;
+		box-shadow: none;
 	}
 
 	/* Dropdown menus */
