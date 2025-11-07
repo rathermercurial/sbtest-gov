@@ -623,24 +623,18 @@ starlight-theme-select select {
 /*
  * Starlight calculates right sidebar as:
  * width = var(--sl-sidebar-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2
- * This gives it sidebar width PLUS half the remaining space.
  *
- * We need to constrain it to just the sidebar width.
- * Testing multiple approaches for proper override:
+ * Approach: Manipulate the calculation by setting --sl-content-width locally
+ * to force the second term to equal zero, leaving just var(--sl-sidebar-width)
+ *
+ * If we set: --sl-content-width = 100% - var(--sl-sidebar-width)
+ * Then: (100% - (100% - var(--sl-sidebar-width)) - var(--sl-sidebar-width)) / 2 = 0
+ * Result: width = var(--sl-sidebar-width) + 0 = var(--sl-sidebar-width)
  */
 
 @media (min-width: 72rem) {
-	/* Target the flex container's right sidebar child */
-	.lg\:sl-flex > .right-sidebar-container {
-		width: var(--sl-sidebar-width);
-		min-width: var(--sl-sidebar-width);
-		max-width: var(--sl-sidebar-width);
-	}
-
-	/* Also constrain the fixed inner element */
-	.right-sidebar-container > .right-sidebar {
-		width: var(--sl-sidebar-width);
-		max-width: var(--sl-sidebar-width);
+	.right-sidebar-container {
+		--sl-content-width: calc(100% - var(--sl-sidebar-width));
 	}
 }
 
