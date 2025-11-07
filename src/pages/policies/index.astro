@@ -58,17 +58,24 @@ const formatFolderName = (folder: string) => {
 		<h2>Browse All Policies</h2>
 		{Object.entries(groupedPolicies).sort().map(([folder, items]) => (
 			<div class="policy-group">
-				<h3>{formatFolderName(folder)}</h3>
-				<div class="card-grid">
+				<h3 class="group-title">{formatFolderName(folder)}</h3>
+				<ul class="entry-list">
 					{items.map(policy => (
-						<a href={`/policies/${policy.id}/`} class="card">
-							<h4>{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}</h4>
-							{policy.data.description && (
-								<p>{policy.data.description}</p>
+						<li class="entry-item">
+							<a href={`/policies/${policy.id}/`} class="entry-link">
+								<strong class="entry-title">{policy.data.title || policy.id.split('/').pop()?.replace('.md', '')}</strong>
+								{policy.data.description && (
+									<p class="entry-description">{policy.data.description}</p>
+								)}
+							</a>
+							{policy.data.status && (
+								<span class={`status-badge status-${policy.data.status}`}>
+									{policy.data.status}
+								</span>
 							)}
-						</a>
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 		))}
 	</div>
@@ -81,47 +88,80 @@ const formatFolderName = (folder: string) => {
 		}
 
 		.policy-group {
-			margin-bottom: 3rem;
+			margin-bottom: 2.5rem;
 		}
 
-		.policy-group h3 {
+		.group-title {
+			font-size: 1.5rem;
 			margin-top: 2rem;
 			margin-bottom: 1rem;
+			color: var(--sl-color-white);
+			border-bottom: 1px solid var(--sl-color-gray-5);
+			padding-bottom: 0.5rem;
 		}
 
-		.card-grid {
+		.entry-list {
+			list-style: none;
+			padding: 0;
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-			gap: 1.5rem;
-			margin: 1rem 0 2rem;
+			gap: 1rem;
 		}
 
-		.card {
-			display: block;
-			padding: 1.5rem;
+		.entry-item {
 			border: 1px solid var(--sl-color-gray-5);
 			border-radius: 0.5rem;
-			text-decoration: none;
-			color: var(--sl-color-text);
-			transition: border-color 0.2s, box-shadow 0.2s;
+			padding: 1rem;
+			transition: border-color 0.2s;
+			position: relative;
 		}
 
-		.card:hover {
+		.entry-item:hover {
 			border-color: var(--sl-color-accent);
-			box-shadow: 0 0 0 1px var(--sl-color-accent);
 		}
 
-		.card h4 {
-			margin-top: 0;
-			margin-bottom: 0.5rem;
+		.entry-link {
+			text-decoration: none;
+			color: inherit;
+			display: block;
+		}
+
+		.entry-title {
 			color: var(--sl-color-white);
+			font-size: 1.1rem;
+			display: block;
+			margin-bottom: 0.5rem;
 		}
 
-		.card p {
+		.entry-description {
+			color: var(--sl-color-gray-3);
 			margin: 0;
 			font-size: 0.9rem;
-			line-height: 1.5;
-			color: var(--sl-color-gray-2);
+		}
+
+		.status-badge {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			font-size: 0.75rem;
+			padding: 0.25rem 0.5rem;
+			border-radius: 0.25rem;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+
+		.status-draft {
+			background: var(--sl-color-orange-low);
+			color: var(--sl-color-orange-high);
+		}
+
+		.status-active {
+			background: var(--sl-color-green-low);
+			color: var(--sl-color-green-high);
+		}
+
+		.status-deprecated {
+			background: var(--sl-color-gray-5);
+			color: var(--sl-color-gray-3);
 		}
 	</style>
 </StarlightPage>

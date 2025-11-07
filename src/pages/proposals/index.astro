@@ -57,16 +57,23 @@ const sortedProposals = proposals.sort((a, b) => {
 				No proposals have been archived yet. This collection will grow as governance decisions are documented.
 			</p>
 		) : (
-			<div class="card-grid">
+			<ul class="entry-list">
 				{sortedProposals.map(proposal => (
-					<a href={`/proposals/${proposal.id}/`} class="card">
-						<h4>{proposal.data.title || proposal.id.replace('.md', '')}</h4>
-						{proposal.data.description && (
-							<p>{proposal.data.description}</p>
+					<li class="entry-item">
+						<a href={`/proposals/${proposal.id}/`} class="entry-link">
+							<strong class="entry-title">{proposal.data.title || proposal.id.replace('.md', '')}</strong>
+							{proposal.data.description && (
+								<p class="entry-description">{proposal.data.description}</p>
+							)}
+						</a>
+						{proposal.data.status && (
+							<span class={`status-badge status-${proposal.data.status}`}>
+								{proposal.data.status}
+							</span>
 						)}
-					</a>
+					</li>
 				))}
-			</div>
+			</ul>
 		)}
 	</div>
 
@@ -85,39 +92,68 @@ const sortedProposals = proposals.sort((a, b) => {
 			color: var(--sl-color-gray-2);
 		}
 
-		.card-grid {
+		.entry-list {
+			list-style: none;
+			padding: 0;
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-			gap: 1.5rem;
-			margin: 1rem 0 2rem;
+			gap: 1rem;
 		}
 
-		.card {
-			display: block;
-			padding: 1.5rem;
+		.entry-item {
 			border: 1px solid var(--sl-color-gray-5);
 			border-radius: 0.5rem;
-			text-decoration: none;
-			color: var(--sl-color-text);
-			transition: border-color 0.2s, box-shadow 0.2s;
+			padding: 1rem;
+			transition: border-color 0.2s;
+			position: relative;
 		}
 
-		.card:hover {
+		.entry-item:hover {
 			border-color: var(--sl-color-accent);
-			box-shadow: 0 0 0 1px var(--sl-color-accent);
 		}
 
-		.card h4 {
-			margin-top: 0;
-			margin-bottom: 0.5rem;
+		.entry-link {
+			text-decoration: none;
+			color: inherit;
+			display: block;
+		}
+
+		.entry-title {
 			color: var(--sl-color-white);
+			font-size: 1.1rem;
+			display: block;
+			margin-bottom: 0.5rem;
 		}
 
-		.card p {
+		.entry-description {
+			color: var(--sl-color-gray-3);
 			margin: 0;
 			font-size: 0.9rem;
-			line-height: 1.5;
-			color: var(--sl-color-gray-2);
+		}
+
+		.status-badge {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			font-size: 0.75rem;
+			padding: 0.25rem 0.5rem;
+			border-radius: 0.25rem;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+
+		.status-draft {
+			background: var(--sl-color-orange-low);
+			color: var(--sl-color-orange-high);
+		}
+
+		.status-active {
+			background: var(--sl-color-green-low);
+			color: var(--sl-color-green-high);
+		}
+
+		.status-deprecated {
+			background: var(--sl-color-gray-5);
+			color: var(--sl-color-gray-3);
 		}
 	</style>
 </StarlightPage>
