@@ -352,19 +352,15 @@ starlight-theme-select select {
 
 /* Enhanced navigation with brand colors */
 .sidebar-content a,
-.sidebar-content a:link {
-	color: var(--sb-charcoal);
-	text-decoration-color: var(--sb-charcoal);
-}
-
+.sidebar-content a:link,
 .sidebar-content a:visited {
 	color: var(--sb-primary);
 	text-decoration-color: var(--sb-primary);
 }
 
 .sidebar-content a:hover {
-	color: #3A3A3A;
-	text-decoration-color: #3A3A3A;
+	color: var(--sb-primary-dark);
+	text-decoration-color: var(--sb-primary-dark);
 }
 
 .sidebar-content a[aria-current="page"],
@@ -381,7 +377,7 @@ starlight-theme-select select {
 }
 
 .sidebar-content details > summary:hover {
-	color: var(--sb-darkgray);
+	color: #3A3A3A;
 }
 
 /* Responsive adjustments */
@@ -593,19 +589,15 @@ starlight-theme-select select {
 
 	/* Navigation colors in dark mode */
 	.sidebar-content a,
-	.sidebar-content a:link {
-		color: var(--sb-darkgray);
-		text-decoration-color: var(--sb-darkgray);
-	}
-
+	.sidebar-content a:link,
 	.sidebar-content a:visited {
 		color: var(--sb-primary);
 		text-decoration-color: var(--sb-primary);
 	}
 
 	.sidebar-content a:hover {
-		color: #DADADA;
-		text-decoration-color: #DADADA;
+		color: var(--sb-primary-dark);
+		text-decoration-color: var(--sb-primary-dark);
 	}
 
 	.sidebar-content a[aria-current="page"],
@@ -621,7 +613,7 @@ starlight-theme-select select {
 	}
 
 	.sidebar-content details > summary:hover {
-		color: var(--sb-lightgray);
+		color: #E0E0E0;
 	}
 }
 
