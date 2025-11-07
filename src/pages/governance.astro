@@ -1,0 +1,55 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { readFile } from 'node:fs/promises';
+import { Marked } from 'marked';
+
+// Load the GOVERNANCE.md file from the governance submodule
+const governancePath = './src/content/governance/GOVERNANCE.md';
+let description = 'SuperBenefit DAO governance framework and principles';
+let title = 'Governance Framework';
+let renderedContent = '<p>Governance framework documentation.</p>';
+
+try {
+	const fileContent = await readFile(governancePath, 'utf-8');
+
+	// Extract frontmatter if present
+	const frontmatterMatch = fileContent.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+	let markdownContent = fileContent;
+
+	if (frontmatterMatch) {
+		const frontmatter = frontmatterMatch[1];
+		markdownContent = frontmatterMatch[2];
+
+		// Extract description from frontmatter
+		const descMatch = frontmatter.match(/description:\s*(.+)/);
+		if (descMatch) {
+			description = descMatch[1].replace(/["']/g, '');
+		}
+
+		// Extract title from frontmatter
+		const titleMatch = frontmatter.match(/title:\s*(.+)/);
+		if (titleMatch) {
+			title = titleMatch[1].replace(/["']/g, '');
+		}
+	}
+
+	// Get title from first H1 if not in frontmatter, and remove it from content
+	const h1Match = markdownContent.match(/^#\s+(.+)$/m);
+	if (h1Match && !frontmatterMatch?.includes('title:')) {
+		title = h1Match[1];
+	}
+	// Remove the H1 from content to avoid duplication (Starlight adds the title)
+	const contentWithoutTitle = markdownContent.replace(/^#\s+.+$/m, '').trim();
+
+	// Render markdown to HTML
+	const marked = new Marked();
+	renderedContent = await marked.parse(contentWithoutTitle);
+} catch (error) {
+	console.error('Failed to load GOVERNANCE.md:', error);
+	// Use fallback content if file doesn't exist
+}
+---
+
+<StarlightPage frontmatter={{ title, description }}>
+	<div class="sl-markdown-content" set:html={renderedContent} />
+</StarlightPage>
