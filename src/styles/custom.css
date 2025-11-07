@@ -1,4 +1,319 @@
-/* Custom styles for SuperBenefit Governance site */
+/**
+ * SuperBenefit Governance Site - Custom Styles
+ *
+ * Maps SuperBenefit design tokens to Starlight CSS variables.
+ * Also includes custom component styling and overrides.
+ */
+
+/* ========================================
+   STARLIGHT THEME CUSTOMIZATION
+   Map SuperBenefit tokens to Starlight variables
+   ======================================== */
+
+:root {
+  /* Accent Colors - Map to Sage palette */
+  --sl-color-accent-low: var(--sb-primary-pale);   /* #C5D4BA - sage pale */
+  --sl-color-accent: var(--sb-primary);             /* #7FA568 - sage */
+  --sl-color-accent-high: var(--sb-primary-dark);   /* #628249 - sage dark */
+
+  /* Gray Scale - Map to Charcoal derivatives */
+  --sl-color-gray-1: var(--sb-surface);     /* #FDFBF8 - lightest (backgrounds) */
+  --sl-color-gray-2: var(--sb-cream);       /* #F5D5B3 - cream */
+  --sl-color-gray-3: var(--sb-lightgray);   /* #A8A8A8 - light gray (muted text) */
+  --sl-color-gray-4: var(--sb-gray);        /* #6B6B6B - medium gray */
+  --sl-color-gray-5: var(--sb-darkgray);    /* #4A4A4A - dark gray (borders) */
+  --sl-color-gray-6: var(--sb-charcoal);    /* #2F2F2F - darkest (text) */
+
+  /* Typography - Using Starlight defaults for now */
+  /* (Custom fonts will be added later) */
+
+  /* Borders */
+  --sl-color-hairline-light: var(--sb-border);
+  --sl-color-hairline: var(--sb-darkgray);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  /* Gray Scale - Inverted for dark mode */
+  --sl-color-gray-1: var(--sb-light);         /* #1F1F1F */
+  --sl-color-gray-2: var(--sb-light-alt);     /* #2A2A2A */
+  --sl-color-gray-3: var(--sb-lightgray);     /* #5A5A5A */
+  --sl-color-gray-4: var(--sb-gray);          /* #9A9A9A */
+  --sl-color-gray-5: var(--sb-darkgray);      /* #D0D0D0 */
+  --sl-color-gray-6: var(--sb-dark);          /* #F5F5F5 */
+
+  /* Background Colors - Critical for dark mode UI elements */
+  --sl-color-bg: var(--sb-light);             /* #1F1F1F - main background */
+  --sl-color-bg-nav: var(--sb-surface);       /* #252525 - navigation bar */
+  --sl-color-bg-sidebar: var(--sb-surface);   /* #252525 - sidebar */
+  --sl-color-bg-inline-code: var(--sb-light-alt); /* #2A2A2A - inline code */
+
+  /* Borders in dark mode */
+  --sl-color-hairline-light: var(--sb-border); /* #3F3F3F */
+  --sl-color-hairline: var(--sb-lightgray);    /* #5A5A5A */
+
+  /* Text colors adjusted for dark mode */
+  --sl-color-text: var(--sb-dark);            /* #F5F5F5 - main text */
+  --sl-color-text-accent: var(--sb-primary);  /* Sage in dark mode */
+
+  /* Black/White overrides for absolute values */
+  --sl-color-black: #1F1F1F;
+  --sl-color-white: #FDFBF8;
+}
+
+/* ========================================
+   COMPONENT CUSTOMIZATION
+   ======================================== */
+
+/* Header text in light mode - ensure dark text for contrast */
+.header a,
+.header button,
+.site-title,
+.header label,
+.theme-toggle,
+.social-icons a {
+	color: var(--sb-charcoal);
+}
+
+.header svg,
+.theme-toggle svg,
+.social-icons svg {
+	fill: var(--sb-charcoal);
+}
+
+
+/* Theme selector dropdown - light mode */
+starlight-theme-select select,
+.theme-select select,
+select[aria-label*="theme" i],
+select[aria-label*="Theme" i] {
+	background-color: var(--sb-surface);
+	color: var(--sb-charcoal);
+	border: 1px solid var(--sb-border);
+	padding: var(--sb-space-2) var(--sb-space-3);
+	border-radius: var(--sb-radius-md);
+}
+
+starlight-theme-select select option,
+.theme-select select option {
+	background-color: var(--sb-surface);
+	color: var(--sb-charcoal);
+}
+
+/* Starlight custom elements in light mode */
+starlight-theme-select,
+starlight-menu-button,
+starlight-lang-select {
+	color: var(--sb-charcoal);
+}
+
+starlight-theme-select svg,
+starlight-menu-button svg {
+	fill: var(--sb-charcoal);
+}
+
+/* Site title link - light mode */
+.site-title a {
+	color: var(--sb-charcoal);
+}
+
+/* Keyboard shortcut hints - light mode */
+.search kbd,
+button[data-open-modal] kbd {
+	background-color: var(--sb-cream);
+	border: 1px solid var(--sb-border);
+	color: var(--sb-darkgray);
+}
+
+/* Search input - light mode */
+.search-input,
+input[type="search"] {
+	background-color: var(--sb-surface);
+	border: 1px solid var(--sb-border);
+	color: var(--sb-charcoal);
+}
+
+.search-input::placeholder,
+input[type="search"]::placeholder {
+	color: var(--sb-gray);
+}
+
+/* Card Enhancements */
+.sl-card,
+.card {
+  border-radius: var(--sb-radius-lg);
+  box-shadow: var(--sb-shadow-md);
+  transition: box-shadow var(--sb-transition-base), transform var(--sb-transition-base);
+}
+
+.sl-card:hover,
+.card:hover {
+  box-shadow: var(--sb-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Link Styling */
+a {
+  transition: color var(--sb-transition-fast);
+}
+
+a:hover {
+  color: var(--sb-primary-dark);
+}
+
+/* Button Enhancements */
+button,
+.button {
+  border-radius: var(--sb-radius-md);
+  transition: all var(--sb-transition-base);
+}
+
+/* Code Blocks */
+pre {
+  border-radius: var(--sb-radius-md);
+  box-shadow: var(--sb-shadow-sm);
+}
+
+code {
+  border-radius: var(--sb-radius-sm);
+}
+
+/* Focus States - Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--sb-primary);
+  outline-offset: 2px;
+  border-radius: var(--sb-radius-sm);
+}
+
+/* ========================================
+   STARLIGHT COMPONENT OVERRIDES
+   Using unlayered CSS for higher specificity than @layer starlight.core
+   ======================================== */
+
+/* Search Modal Dialog - Fix background (Starlight uses gray-6 which we remapped) */
+dialog {
+	background-color: var(--sb-surface);
+	border: 1px solid var(--sb-border);
+}
+
+.dialog-frame {
+	background-color: var(--sb-surface);
+}
+
+#starlight__search {
+	background-color: var(--sb-surface);
+}
+
+#starlight__search .pagefind-ui__result-title,
+#starlight__search .pagefind-ui__result-nested {
+	background-color: var(--sb-light);
+}
+
+/* Search Button - Remove border and fix kbd styling */
+button[data-open-modal] {
+	border: none;
+	background-color: transparent;
+}
+
+/* Fix kbd (keyboard shortcut) styling - remove background boxes at small screens */
+button[data-open-modal] kbd {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+button[data-open-modal] kbd kbd {
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+@media (min-width: 50rem) {
+	button[data-open-modal] {
+		border: 1px solid var(--sl-color-gray-5);
+		background-color: var(--sl-color-black);
+		padding-inline-start: 0.75rem;
+		padding-inline-end: 0.5rem;
+	}
+
+	/* Show kbd shortcuts at larger screens with proper styling */
+	button[data-open-modal] kbd {
+		background-color: var(--sb-cream);
+		border: 1px solid var(--sb-border);
+		border-radius: 0.25rem;
+		padding-inline: 0.375rem;
+		color: var(--sb-darkgray);
+	}
+
+	button[data-open-modal] kbd kbd {
+		background-color: transparent;
+		border: none;
+		padding: 0;
+	}
+}
+
+/* Theme Selector - Increase spacing between icon and text */
+starlight-theme-select select {
+	padding-inline-start: calc(var(--sl-label-icon-size, 0.875rem) + 1rem);
+	padding-inline-end: calc(var(--sl-caret-size, 1.25rem) + 1rem);
+}
+
+/* ========================================
+   HERO / SPLASH PAGE STYLING
+   ======================================== */
+
+.hero {
+  position: relative;
+}
+
+.hero h1 {
+  color: var(--sl-color-gray-6);
+}
+
+.hero .tagline {
+  color: var(--sl-color-gray-4);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Text Colors */
+.text-primary { color: var(--sb-primary); }
+.text-secondary { color: var(--sb-secondary); }
+.text-tertiary { color: var(--sb-tertiary); }
+.text-muted { color: var(--sb-gray); }
+
+/* Background Colors */
+.bg-cream { background-color: var(--sb-cream); }
+.bg-sage { background-color: var(--sb-primary); }
+.bg-orange { background-color: var(--sb-secondary); }
+.bg-surface { background-color: var(--sb-surface); }
+
+/* Border Colors */
+.border-sage { border-color: var(--sb-primary); }
+.border-orange { border-color: var(--sb-secondary); }
+.border-subtle { border-color: var(--sb-border); }
+
+/* Interactive Effects */
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px var(--sb-highlight);
+}
+
+.active-depress:active {
+  transform: translateY(1px);
+}
+
+/* ========================================
+   NAVIGATION & SIDEBAR STYLING (WS3)
+   Enhanced with SuperBenefit brand colors
+   ======================================== */
 
 /* Visual hierarchy for sidebar navigation */
 
@@ -6,7 +321,7 @@
 .sidebar-content nav > ul > li:last-child {
 	margin-top: 2rem;
 	padding-top: 1.5rem;
-	border-top: 1px solid var(--sl-color-gray-5);
+	border-top: 1px solid var(--sb-border);
 }
 
 /* De-emphasize the Reference section */
@@ -32,10 +347,278 @@
 	font-weight: 500;
 }
 
+/* Enhanced navigation with brand colors */
+.sidebar-content nav a,
+.sidebar-content nav a:link,
+.sidebar-content nav a:visited {
+	color: var(--sb-charcoal);
+	text-decoration-color: var(--sb-charcoal);
+}
+
+.sidebar-content nav a:hover {
+	background-color: var(--sb-text-highlight);
+	color: var(--sb-darkgray);
+	text-decoration-color: var(--sb-darkgray);
+}
+
+.sidebar-content nav a[aria-current="page"],
+.sidebar-content nav a[aria-current="page"]:link,
+.sidebar-content nav a[aria-current="page"]:visited {
+	background-color: var(--sb-highlight);
+	color: var(--sb-primary-dark);
+	border-left: 3px solid var(--sb-primary);
+	text-decoration-color: var(--sb-primary-dark);
+}
+
+.sidebar-content nav details > summary {
+	color: var(--sb-charcoal);
+	transition: color var(--sb-transition-fast);
+}
+
+.sidebar-content nav details > summary:hover {
+	color: var(--sb-darkgray);
+}
+
 /* Responsive adjustments */
 @media (max-width: 72rem) {
 	.sidebar-content nav > ul > li:last-child {
 		margin-top: 1.5rem;
 		padding-top: 1rem;
 	}
+}
+
+/* ========================================
+   DARK MODE COMPONENT OVERRIDES
+   Ensure all UI elements have proper dark backgrounds
+   ======================================== */
+
+[data-theme="dark"] {
+	/* Header/Top bar */
+	.header {
+		background-color: var(--sb-surface);
+		border-bottom-color: var(--sb-border);
+	}
+
+	/* Header text elements */
+	.header a,
+	.header button,
+	.site-title,
+	.header label {
+		color: var(--sb-dark);
+	}
+
+	/* Theme toggle and other header buttons */
+	.theme-toggle,
+	.social-icons a,
+	.header svg {
+		color: var(--sb-dark);
+		fill: var(--sb-dark);
+	}
+
+	/* Sidebar */
+	.sidebar {
+		background-color: var(--sb-surface);
+	}
+
+	.sidebar-pane {
+		background-color: var(--sb-surface);
+	}
+
+	.sidebar-content {
+		background-color: var(--sb-surface);
+	}
+
+	/* Search Modal - Fix dialog background */
+	dialog {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Search modal dialog frame */
+	.dialog-frame {
+		background-color: var(--sb-light-alt);
+	}
+
+	/* Search container inside modal */
+	.search-container {
+		background-color: var(--sb-light-alt);
+	}
+
+	/* Search input and placeholder */
+	.search-input,
+	input[type="search"] {
+		background-color: var(--sb-surface);
+		border-color: var(--sb-border);
+		color: var(--sb-dark);
+	}
+
+	.search-input::placeholder,
+	input[type="search"]::placeholder {
+		color: var(--sb-gray);
+		opacity: 1;
+	}
+
+	/* Pagefind search results */
+	#starlight__search {
+		background-color: var(--sb-light-alt);
+	}
+
+	/* Fix search result backgrounds */
+	#starlight__search .pagefind-ui__result-title,
+	#starlight__search .pagefind-ui__result-nested {
+		background-color: var(--sb-surface);
+	}
+
+	/* Dropdown menus */
+	.dropdown,
+	.menu {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Cards in dark mode */
+	.card,
+	.sl-card {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Code blocks */
+	pre {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Mobile menu overlay */
+	.mobile-menu-toggle,
+	.mobile-menu-content {
+		background-color: var(--sb-surface);
+	}
+
+	/* Starlight-specific header components */
+	.sl-nav,
+	[data-has-hero] header,
+	header.header {
+		background-color: var(--sb-surface);
+	}
+
+	/* Site title link */
+	.site-title a {
+		color: var(--sb-dark);
+	}
+
+	/* Theme select dropdown */
+	starlight-theme-select,
+	.theme-select,
+	.theme-select button {
+		color: var(--sb-dark);
+	}
+
+	/* Theme selector dropdown options - dark mode */
+	starlight-theme-select select,
+	.theme-select select,
+	select[aria-label*="theme" i],
+	select[aria-label*="Theme" i] {
+		background-color: var(--sb-surface);
+		color: var(--sb-dark);
+		border-color: var(--sb-border);
+	}
+
+	starlight-theme-select select option,
+	.theme-select select option {
+		background-color: var(--sb-surface);
+		color: var(--sb-dark);
+	}
+
+	/* Dropdown menu when opened */
+	starlight-theme-select select:focus,
+	.theme-select select:focus {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-primary);
+	}
+
+	/* Language picker */
+	starlight-lang-select,
+	.lang-select {
+		color: var(--sb-dark);
+	}
+
+	/* Social icons in header */
+	.social-icons svg {
+		fill: var(--sb-dark);
+	}
+
+	/* Menu button (mobile) */
+	starlight-menu-button,
+	.mobile-menu-toggle button {
+		color: var(--sb-dark);
+	}
+
+	starlight-menu-button svg,
+	.mobile-menu-toggle svg {
+		fill: var(--sb-dark);
+	}
+
+	/* Search component */
+	site-search,
+	starlight-search {
+		color: var(--sb-dark);
+	}
+
+	/* Search trigger button */
+	button[data-open-modal="true"],
+	button[data-open-modal="false"],
+	.search button {
+		color: var(--sb-dark);
+		background-color: var(--sb-surface);
+		border-color: var(--sb-border);
+	}
+
+	/* Keyboard shortcut hint in dark mode */
+	button[data-open-modal] kbd {
+		background-color: var(--sb-surface);
+		border: 1px solid var(--sb-border);
+		color: var(--sb-gray);
+	}
+
+	button[data-open-modal] kbd kbd {
+		background-color: transparent;
+		border: none;
+	}
+
+	/* Navigation colors in dark mode */
+	.sidebar-content nav a,
+	.sidebar-content nav a:link,
+	.sidebar-content nav a:visited {
+		color: var(--sb-darkgray);
+		text-decoration-color: var(--sb-darkgray);
+	}
+
+	.sidebar-content nav a:hover {
+		color: var(--sb-lightgray);
+		text-decoration-color: var(--sb-lightgray);
+	}
+
+	.sidebar-content nav details > summary {
+		color: var(--sb-darkgray);
+	}
+
+	.sidebar-content nav details > summary:hover {
+		color: var(--sb-lightgray);
+	}
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

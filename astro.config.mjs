@@ -34,8 +34,9 @@ export default defineConfig({
 				baseUrl: 'https://github.com/superbenefit/governance-site/edit/main/',
 			},
 			lastUpdated: true,
-			// Custom CSS for visual hierarchy
+			// Custom CSS - design tokens + custom styles
 			customCss: [
+				'./src/styles/design-tokens.css',
 				'./src/styles/custom.css',
 			],
 			// Override Sidebar component with custom implementation

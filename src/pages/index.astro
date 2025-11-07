@@ -55,44 +55,78 @@ const proposals = await getCollection('proposals');
 			font-size: 1.25rem;
 			line-height: 1.6;
 			margin-bottom: 2rem;
-			color: var(--sl-color-text);
+			color: var(--sl-color-gray-4);
+		}
+
+		/* Ensure regular paragraph text has good contrast */
+		.sl-markdown-content > p {
+			color: var(--sl-color-gray-6);
+			line-height: 1.6;
 		}
 
 		.card-grid {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-			gap: 1.5rem;
-			margin: 2rem 0;
+			gap: var(--sb-space-6);
+			margin: var(--sb-space-8) 0;
 		}
 
 		.card {
 			display: block;
-			padding: 1.5rem;
-			border: 1px solid var(--sl-color-gray-5);
-			border-radius: 0.5rem;
+			padding: var(--sb-space-6);
+			background: var(--sb-surface);
+			border: 1px solid var(--sb-border);
+			border-radius: var(--sb-radius-lg);
+			box-shadow: var(--sb-shadow-md);
 			text-decoration: none;
 			color: var(--sl-color-text);
-			transition: border-color 0.2s, box-shadow 0.2s;
+			transition: all var(--sb-transition-base);
 		}
 
 		.card:hover {
-			border-color: var(--sl-color-accent);
-			box-shadow: 0 0 0 1px var(--sl-color-accent);
+			border-color: var(--sb-primary);
+			box-shadow: var(--sb-shadow-lg);
+			transform: translateY(-4px);
 		}
 
 		.card h3 {
 			margin-top: 0;
-			color: var(--sl-color-white);
+			color: var(--sb-primary);
+			font-size: var(--text-xl, 1.25rem);
+			margin-bottom: var(--sb-space-3);
 		}
 
 		.card p {
 			margin-bottom: 0.5rem;
+			color: var(--sl-color-gray-4);
+			line-height: 1.5;
 		}
 
 		.card .count {
 			font-size: 0.875rem;
-			color: var(--sl-color-gray-3);
-			margin-top: 1rem;
+			color: var(--sb-primary-light);
+			font-weight: 600;
+			margin-top: var(--sb-space-4);
+		}
+
+		h2 {
+			color: var(--sl-color-gray-6);
+			border-bottom: 2px solid var(--sb-primary-pale);
+			padding-bottom: var(--sb-space-2);
+			margin-top: var(--sb-space-12);
+		}
+
+		/* Dark mode adjustments */
+		[data-theme="dark"] .card {
+			background: var(--sl-color-gray-2);
+		}
+
+		[data-theme="dark"] h2 {
+			color: var(--sl-color-gray-1);
+		}
+
+		[data-theme="dark"] .sl-markdown-content > p {
+			color: var(--sl-color-gray-1);
 		}
 	</style>
 </StarlightPage>
