@@ -34,31 +34,6 @@ export default defineConfig({
 			components: {
 				Sidebar: './src/components/starlight/Sidebar.astro',
 			},
-			// Sidebar config is not used when Sidebar component is overridden,
-			// but kept here for reference/documentation
-			sidebar: [
-				{
-					label: 'Agreements',
-					autogenerate: { directory: 'agreements' },
-				},
-				{
-					label: 'Policies',
-					autogenerate: { directory: 'policies' },
-				},
-				{
-					label: 'Proposals',
-					autogenerate: { directory: 'proposals' },
-				},
-				{
-					label: 'Reference',
-					collapsed: true,
-					items: [
-						{ label: 'Governance Framework', slug: 'governance' },
-						{ label: 'Code of Conduct', slug: 'code-of-conduct' },
-						{ label: 'Contributing', slug: 'contributing' },
-					],
-				},
-			],
 		}),
 	],
 });
