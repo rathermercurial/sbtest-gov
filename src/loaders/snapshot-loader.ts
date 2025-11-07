@@ -208,11 +208,14 @@ export function snapshotLoader(options: {
           // Sanitize the proposal body content
           const sanitizedBody = sanitizeContent(proposal.body);
 
+          // Log body length for debugging
+          logger.info(`Proposal body length: ${sanitizedBody.length} characters`);
+
           // Prepare the data object that matches our schema
           const data = {
             title: proposal.title,
             description: `Snapshot proposal: ${proposal.title}`,
-            status: outcome.passed ? 'active' : 'deprecated',
+            status: outcome.passed ? 'passed' : 'rejected',
             lastUpdated: new Date(proposal.end * 1000), // Convert Unix timestamp to Date
             tags: ['snapshot', 'proposal', outcome.passed ? 'passed' : 'failed'],
             // Additional Snapshot-specific metadata

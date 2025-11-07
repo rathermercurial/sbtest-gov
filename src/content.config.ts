@@ -36,7 +36,7 @@ import { snapshotLoader } from './loaders/snapshot-loader';
 const governanceSchema = z.object({
 	title: z.string().optional(),
 	description: z.string(),
-	status: z.enum(['draft', 'active', 'deprecated']).optional(),
+	status: z.enum(['draft', 'active', 'deprecated', 'passed', 'rejected']).optional(),
 	lastUpdated: z.coerce.date().optional(),
 	tags: z.array(z.string()).optional(),
 	relatedDocs: z.array(z.string()).optional(),
