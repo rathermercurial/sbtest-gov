@@ -617,16 +617,30 @@ starlight-theme-select select {
 
 /* ========================================
    RIGHT TOC SIDEBAR WIDTH FIX
-   Match left sidebar width for consistency
+   Constrain to match left sidebar width
    ======================================== */
 
-/* Override Starlight's calculated width with higher specificity */
+/*
+ * Starlight calculates right sidebar as:
+ * width = var(--sl-sidebar-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2
+ * This gives it sidebar width PLUS half the remaining space.
+ *
+ * We need to constrain it to just the sidebar width.
+ * Testing multiple approaches for proper override:
+ */
+
 @media (min-width: 72rem) {
-	aside.right-sidebar-container {
+	/* Target the flex container's right sidebar child */
+	.lg\:sl-flex > .right-sidebar-container {
 		width: var(--sl-sidebar-width);
-		flex-basis: var(--sl-sidebar-width);
-		flex-grow: 0;
-		flex-shrink: 0;
+		min-width: var(--sl-sidebar-width);
+		max-width: var(--sl-sidebar-width);
+	}
+
+	/* Also constrain the fixed inner element */
+	.right-sidebar-container > .right-sidebar {
+		width: var(--sl-sidebar-width);
+		max-width: var(--sl-sidebar-width);
 	}
 }
 
