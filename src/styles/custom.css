@@ -239,6 +239,22 @@ code {
 		border-bottom-color: var(--sb-border);
 	}
 
+	/* Header text elements */
+	.header a,
+	.header button,
+	.site-title,
+	.header label {
+		color: var(--sb-dark);
+	}
+
+	/* Theme toggle and other header buttons */
+	.theme-toggle,
+	.social-icons a,
+	.header svg {
+		color: var(--sb-dark);
+		fill: var(--sb-dark);
+	}
+
 	/* Sidebar */
 	.sidebar {
 		background-color: var(--sb-surface);
@@ -258,12 +274,29 @@ code {
 		background-color: var(--sb-light-alt);
 	}
 
-	/* Search input */
+	/* Search input and placeholder */
 	.search-input,
 	input[type="search"] {
 		background-color: var(--sb-surface);
 		border-color: var(--sb-border);
 		color: var(--sb-dark);
+	}
+
+	.search-input::placeholder,
+	input[type="search"]::placeholder {
+		color: var(--sb-gray);
+		opacity: 1;
+	}
+
+	/* Search button/icon */
+	button[data-open-modal],
+	.search-button {
+		color: var(--sb-dark);
+	}
+
+	button[data-open-modal] svg,
+	.search-button svg {
+		fill: var(--sb-dark);
 	}
 
 	/* Dropdown menus */
@@ -290,6 +323,70 @@ code {
 	.mobile-menu-toggle,
 	.mobile-menu-content {
 		background-color: var(--sb-surface);
+	}
+
+	/* Starlight-specific header components */
+	.sl-nav,
+	[data-has-hero] header,
+	header.header {
+		background-color: var(--sb-surface);
+	}
+
+	/* Site title link */
+	.site-title a {
+		color: var(--sb-dark) !important;
+	}
+
+	/* Theme select dropdown */
+	starlight-theme-select,
+	.theme-select,
+	.theme-select button {
+		color: var(--sb-dark);
+	}
+
+	/* Language picker */
+	starlight-lang-select,
+	.lang-select {
+		color: var(--sb-dark);
+	}
+
+	/* Social icons in header */
+	.social-icons svg {
+		fill: var(--sb-dark);
+	}
+
+	/* Menu button (mobile) */
+	starlight-menu-button,
+	.mobile-menu-toggle button {
+		color: var(--sb-dark);
+	}
+
+	starlight-menu-button svg,
+	.mobile-menu-toggle svg {
+		fill: var(--sb-dark);
+	}
+
+	/* Search component */
+	site-search,
+	starlight-search {
+		color: var(--sb-dark);
+	}
+
+	/* Search trigger button */
+	button[data-open-modal="true"],
+	button[data-open-modal="false"],
+	.search button {
+		color: var(--sb-dark);
+		background-color: var(--sb-surface);
+		border-color: var(--sb-border);
+	}
+
+	/* Keyboard shortcut hint */
+	.search kbd,
+	button[data-open-modal] kbd {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+		color: var(--sb-gray);
 	}
 }
 
