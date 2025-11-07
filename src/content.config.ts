@@ -111,7 +111,7 @@ export const collections = {
 	proposals: defineCollection({
 		loader: snapshotLoader({
 			space: 'superbenefit.eth',
-			limit: 1, // Start with 1 for testing, increase later
+			limit: 20, // Fetch up to 20 proposals (covers all 16 + room for new ones)
 			includeFailedProposals: false, // Only include passed proposals
 			useMockData: false, // Set to true for local development without network access
 		}),
