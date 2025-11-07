@@ -164,7 +164,7 @@ export function snapshotLoader(options: {
 
   return {
     name: 'snapshot-loader',
-    load: async ({ store, logger, parseData, generateDigest }) => {
+    load: async ({ store, logger, parseData, generateDigest, meta, config }) => {
       logger.info(`Fetching proposals from Snapshot space: ${space}`);
 
       try {
@@ -208,8 +208,17 @@ export function snapshotLoader(options: {
           // Sanitize the proposal body content
           const sanitizedBody = sanitizeContent(proposal.body);
 
-          // Log body length for debugging
+          // Log body length and preview for debugging
           logger.info(`Proposal body length: ${sanitizedBody.length} characters`);
+          if (sanitizedBody.length > 0) {
+            const preview = sanitizedBody.substring(0, 100).replace(/\n/g, ' ');
+            logger.info(`Body preview: ${preview}...`);
+
+            // Detect content type
+            const hasHtmlTags = /<[a-z][\s\S]*>/i.test(sanitizedBody);
+            const hasMarkdown = /[#*_\[\]]/g.test(sanitizedBody);
+            logger.info(`Content analysis: HTML tags: ${hasHtmlTags}, Markdown syntax: ${hasMarkdown}`);
+          }
 
           // Prepare the data object that matches our schema
           const data = {
@@ -233,11 +242,13 @@ export function snapshotLoader(options: {
             percentageVoted: outcome.percentageVoted,
           };
 
-          // Store the entry
+          // Store the entry with markdown body
+          // Note: The body will be processed as markdown by Astro's render function
           store.set({
             id,
             data,
             body: sanitizedBody,
+            filePath: `${id}.md`, // Mark as markdown for proper rendering
             digest: generateDigest(data),
           });
 
