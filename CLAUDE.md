@@ -6,6 +6,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an Astro-based documentation site using the Starlight framework. Starlight is Astro's official documentation theme designed for building beautiful, accessible, and performant documentation websites.
 
+## Git Commit Attribution
+
+**CRITICAL**: All commits MUST include proper co-author attribution. This is collaborative work between Claude and the project maintainer.
+
+When making commits, ALWAYS include this co-author line in the commit message:
+
+```
+Co-authored-by: rathermercurial <rathermercurial@protonmail.com>
+```
+
+Example commit format:
+```
+feat: Add new documentation section
+
+Co-authored-by: rathermercurial <rathermercurial@protonmail.com>
+```
+
+This is non-negotiable - every commit must credit the human collaborator who initiated the project, planned the work, wrote the prompts, and reviews all changes.
+
 ## Development Commands
 
 All commands are run from the root of the project:
