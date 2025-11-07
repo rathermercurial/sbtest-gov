@@ -95,21 +95,27 @@ All commands are run from the root of the project:
 ├── src/
 │   ├── assets/               # Images and media files
 │   ├── components/
-│   │   ├── starlight/
-│   │   │   └── Sidebar.astro     # Custom navigation sidebar (overrides Starlight)
-│   │   └── CollectionList.astro  # Component for querying/displaying collection entries
+│   │   └── starlight/
+│   │       └── Sidebar.astro     # Custom navigation sidebar (overrides Starlight)
 │   ├── content/
+│   │   ├── docs/             # Empty directory (required by Starlight)
 │   │   └── governance/       # Git submodule (governance repository)
 │   │       ├── agreements/   # Agreement markdown files
 │   │       ├── policies/     # Policy markdown files
 │   │       └── proposals/    # Proposal markdown files
-│   ├── pages/                # Dynamic route pages
+│   ├── pages/                # Route pages
+│   │   ├── index.astro       # Home/landing page
 │   │   ├── agreements/
-│   │   │   └── [...slug].astro  # Renders agreement pages
+│   │   │   ├── index.astro       # Agreements index with dynamic card list
+│   │   │   └── [...slug].astro   # Individual agreement pages
 │   │   ├── policies/
-│   │   │   └── [...slug].astro  # Renders policy pages
+│   │   │   ├── index.astro       # Policies index with dynamic card list
+│   │   │   └── [...slug].astro   # Individual policy pages
 │   │   └── proposals/
-│   │       └── [...slug].astro  # Renders proposal pages
+│   │       ├── index.astro       # Proposals index with dynamic card list
+│   │       └── [...slug].astro   # Individual proposal pages
+│   ├── styles/
+│   │   └── custom.css        # Custom CSS for navigation styling
 │   └── content.config.ts     # Content collections configuration
 ├── astro.config.mjs          # Astro and Starlight configuration
 ├── CLAUDE.md                 # AI assistant guidance
@@ -202,6 +208,67 @@ Each route file:
 **Example URL mapping:**
 - File: `src/content/governance/policies/operations/authority-delegation.md`
 - URL: `/policies/operations/authority-delegation/`
+
+#### Index Pages with Dynamic Content
+
+Each main collection (agreements, policies, proposals) has a dedicated index page that combines static content from the governance repository with a dynamically generated list of all documents in that collection.
+
+**Locations:**
+- `src/pages/agreements/index.astro`
+- `src/pages/policies/index.astro`
+- `src/pages/proposals/index.astro`
+
+##### How Index Pages Work
+
+Each index page:
+
+1. **Reads governance content** - Loads the corresponding `index.md` file from the governance submodule (e.g., `src/content/governance/agreements/index.md`)
+2. **Extracts frontmatter** - Pulls `description` and other metadata from the governance index file
+3. **Extracts H1 title** - Uses the first H1 heading as the page title
+4. **Renders markdown** - Converts markdown content to HTML using the `marked` library
+5. **Queries the collection** - Gets all entries from the collection (e.g., all agreements)
+6. **Extracts document titles** - Uses Astro's `render()` to extract H1 headings when titles aren't in frontmatter
+7. **Groups by folder** - Organizes documents by subfolder structure
+8. **Displays cards** - Renders wide horizontal cards with title, description, and optional status badges
+
+##### Card Layout
+
+Documents are displayed as wide, horizontal cards with:
+
+- **Border with hover effect** - Changes to accent color on hover
+- **Document title** - Extracted from frontmatter or H1 heading
+- **Description** - Shown below title if available in frontmatter
+- **Status badge** - Color-coded badge in top-right corner (draft/active/deprecated)
+- **Folder grouping** - Documents organized under subfolder headings
+- **Full-width cards** - Each document gets its own card stacked vertically (not a multi-column grid)
+
+##### Title Extraction Logic
+
+For accurate titles in both navigation and index cards:
+
+1. **First**: Check frontmatter `title` field
+2. **Then**: Extract first H1 heading from document using `render()`
+3. **Finally**: Fall back to entry ID if neither exists
+
+This ensures page titles like "Operating Agreement" are displayed instead of filenames like "operating-agreement".
+
+##### Content Source
+
+The index page content (introduction, description, context) comes from `index.md` files in the governance repository:
+
+- `src/content/governance/agreements/index.md`
+- `src/content/governance/policies/index.md`
+- `src/content/governance/proposals/index.md`
+
+This maintains the governance repository as the single source of truth for all content, including index page prose.
+
+##### Benefits
+
+- **Single source of truth** - All content including index pages managed in governance repo
+- **Auto-updating lists** - Adding new documents automatically updates index pages
+- **Rich context** - Combines curated prose with comprehensive document listings
+- **Consistent styling** - Cards match site's visual design language
+- **Mobile-friendly** - Responsive card layout works well on all screen sizes
 
 #### Custom Navigation Sidebar
 
