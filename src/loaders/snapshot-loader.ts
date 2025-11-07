@@ -17,7 +17,8 @@
  *
  * Caching:
  * - Cache stored in .snapshot-cache.json (gitignored)
- * - Compares raw markdown body to detect changes
+ * - Uses proposal ID + end timestamp + state for cache validation
+ * - Closed proposals are immutable - safe to cache indefinitely
  * - Skips expensive markdown conversion for cached proposals
  * - Significantly speeds up subsequent builds
  *
@@ -100,7 +101,8 @@ interface SnapshotResponse {
  */
 interface CachedProposal {
   id: string;
-  rawBody: string; // Original markdown body for comparison
+  end: number; // End timestamp for verification
+  state: string; // Proposal state
   htmlBody: string; // Processed HTML
   data: any; // Proposal metadata
   cachedAt: number; // Timestamp when cached
@@ -262,27 +264,23 @@ export function snapshotLoader(options: {
           // Create unique ID for this entry
           const id = createSlug(proposal);
 
-          // Sanitize the proposal body content
-          const sanitizedBody = sanitizeContent(proposal.body);
-
           // Check if we have this proposal in cache and if it's unchanged
+          // For closed proposals, if ID and end timestamp match, the proposal is immutable
           const cached = cache.get(id);
           let htmlBody: string;
 
-          if (cached && cached.rawBody === sanitizedBody) {
-            // Use cached HTML - no need to reprocess
+          if (cached && cached.end === proposal.end && cached.state === proposal.state) {
+            // Use cached HTML - closed proposals are immutable
             htmlBody = cached.htmlBody;
             cachedCount++;
-            logger.info(`✓ Using cached version: ${proposal.title}`);
+            logger.info(`✓ Using cached: ${proposal.title}`);
           } else {
             // New or changed proposal - process it
-            logger.info(`Processing ${cached ? 'updated' : 'new'} proposal: ${proposal.title}`);
-            logger.info(`  Body length: ${sanitizedBody.length} characters`);
+            logger.info(`${cached ? '⟳ Reprocessing' : '+ Processing new'}: ${proposal.title}`);
 
-            if (sanitizedBody.length > 0) {
-              const preview = sanitizedBody.substring(0, 100).replace(/\n/g, ' ');
-              logger.info(`  Preview: ${preview}...`);
-            }
+            // Sanitize the proposal body content
+            const sanitizedBody = sanitizeContent(proposal.body);
+            logger.info(`  Body length: ${sanitizedBody.length} characters`);
 
             // Convert markdown to HTML for proper rendering
             htmlBody = sanitizedBody.length > 0
@@ -292,7 +290,7 @@ export function snapshotLoader(options: {
                 })
               : '';
 
-            logger.info(`  Converted to HTML, length: ${htmlBody.length} characters`);
+            logger.info(`  HTML length: ${htmlBody.length} characters`);
             processedCount++;
           }
 
@@ -329,7 +327,8 @@ export function snapshotLoader(options: {
           // Update cache with this proposal
           updatedCache.set(id, {
             id,
-            rawBody: sanitizedBody,
+            end: proposal.end,
+            state: proposal.state,
             htmlBody,
             data,
             cachedAt: Date.now(),
