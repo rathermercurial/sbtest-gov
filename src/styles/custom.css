@@ -34,13 +34,31 @@
 
 /* Dark Mode Overrides */
 [data-theme="dark"] {
-  /* These are already set in design-tokens.css but we ensure they apply to Starlight */
+  /* Gray Scale - Inverted for dark mode */
   --sl-color-gray-1: var(--sb-light);         /* #1F1F1F */
   --sl-color-gray-2: var(--sb-light-alt);     /* #2A2A2A */
   --sl-color-gray-3: var(--sb-lightgray);     /* #5A5A5A */
   --sl-color-gray-4: var(--sb-gray);          /* #9A9A9A */
   --sl-color-gray-5: var(--sb-darkgray);      /* #D0D0D0 */
   --sl-color-gray-6: var(--sb-dark);          /* #F5F5F5 */
+
+  /* Background Colors - Critical for dark mode UI elements */
+  --sl-color-bg: var(--sb-light);             /* #1F1F1F - main background */
+  --sl-color-bg-nav: var(--sb-surface);       /* #252525 - navigation bar */
+  --sl-color-bg-sidebar: var(--sb-surface);   /* #252525 - sidebar */
+  --sl-color-bg-inline-code: var(--sb-light-alt); /* #2A2A2A - inline code */
+
+  /* Borders in dark mode */
+  --sl-color-hairline-light: var(--sb-border); /* #3F3F3F */
+  --sl-color-hairline: var(--sb-lightgray);    /* #5A5A5A */
+
+  /* Text colors adjusted for dark mode */
+  --sl-color-text: var(--sb-dark);            /* #F5F5F5 - main text */
+  --sl-color-text-accent: var(--sb-primary);  /* Sage in dark mode */
+
+  /* Black/White overrides for absolute values */
+  --sl-color-black: #1F1F1F;
+  --sl-color-white: #FDFBF8;
 }
 
 /* ========================================
@@ -206,6 +224,72 @@ code {
 	.sidebar-content nav > ul > li:last-child {
 		margin-top: 1.5rem;
 		padding-top: 1rem;
+	}
+}
+
+/* ========================================
+   DARK MODE COMPONENT OVERRIDES
+   Ensure all UI elements have proper dark backgrounds
+   ======================================== */
+
+[data-theme="dark"] {
+	/* Header/Top bar */
+	.header {
+		background-color: var(--sb-surface);
+		border-bottom-color: var(--sb-border);
+	}
+
+	/* Sidebar */
+	.sidebar {
+		background-color: var(--sb-surface);
+	}
+
+	.sidebar-pane {
+		background-color: var(--sb-surface);
+	}
+
+	.sidebar-content {
+		background-color: var(--sb-surface);
+	}
+
+	/* Search Modal */
+	.search-modal,
+	[data-open-modal] {
+		background-color: var(--sb-light-alt);
+	}
+
+	/* Search input */
+	.search-input,
+	input[type="search"] {
+		background-color: var(--sb-surface);
+		border-color: var(--sb-border);
+		color: var(--sb-dark);
+	}
+
+	/* Dropdown menus */
+	.dropdown,
+	.menu {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Cards in dark mode */
+	.card,
+	.sl-card {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Code blocks */
+	pre {
+		background-color: var(--sb-light-alt);
+		border-color: var(--sb-border);
+	}
+
+	/* Mobile menu overlay */
+	.mobile-menu-toggle,
+	.mobile-menu-content {
+		background-color: var(--sb-surface);
 	}
 }
 

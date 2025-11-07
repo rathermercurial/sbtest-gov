@@ -194,12 +194,8 @@ const formatFolderName = (folder: string) => {
 			background: var(--sl-color-gray-2);
 		}
 
-		[data-theme="dark"] .group-title {
-			color: var(--sl-color-gray-1);
-		}
-
-		[data-theme="dark"] .entry-title {
-			color: var(--sl-color-gray-1);
-		}
+		/* Text colors use gray-6 which auto-inverts via CSS variables */
+		/* group-title and entry-title already use --sl-color-gray-6 */
+		/* In dark mode, gray-6 becomes light (#F5F5F5) automatically */
 	</style>
 </StarlightPage>
