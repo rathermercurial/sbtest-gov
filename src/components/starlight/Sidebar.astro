@@ -9,6 +9,8 @@ import { getCollection, render } from 'astro:content';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import { Icon } from '@astrojs/starlight/components';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 // Get all entries from governance collections
 const agreements = await getCollection('agreements');
@@ -114,32 +116,30 @@ function formatProposalTitle(entry: any): string {
  * Get folder title from index.md file
  * Priority: 1) title frontmatter, 2) h1 heading, 3) formatted slug
  */
-async function getFolderTitle(entries: any[], groupKey: string): Promise<string> {
-	// Look for index.md in this folder
-	const indexEntry = entries.find(entry =>
-		entry.id === `${groupKey}/index` || entry.id === groupKey
-	);
-
-	if (!indexEntry) {
-		// No index file, use formatted slug
-		return formatGroupName(groupKey);
-	}
-
-	// Try frontmatter title first
-	if (indexEntry.data?.title) {
-		return indexEntry.data.title;
-	}
-
-	// Try to extract h1 from content
+async function getFolderTitle(collectionName: string, groupKey: string): Promise<string> {
 	try {
-		const { headings } = await render(indexEntry);
-		const h1 = headings.find(h => h.depth === 1);
-		if (h1?.text) {
-			return h1.text;
+		// Read index.md file from governance submodule
+		const indexPath = join(process.cwd(), 'src/content/governance', collectionName, groupKey, 'index.md');
+		const content = await readFile(indexPath, 'utf-8');
+
+		// Extract frontmatter
+		const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+		if (frontmatterMatch) {
+			const frontmatter = frontmatterMatch[1];
+			const titleMatch = frontmatter.match(/^title:\s*(.+)$/m);
+			if (titleMatch) {
+				return titleMatch[1].trim();
+			}
+		}
+
+		// Try to extract h1 from content
+		const h1Match = content.match(/^#\s+(.+)$/m);
+		if (h1Match) {
+			return h1Match[1].trim();
 		}
 	} catch (error) {
-		// If render fails, fall back to slug
-		console.log(`Could not render ${groupKey}/index for heading extraction`);
+		// Index file doesn't exist or couldn't be read
+		// Fall through to return formatted slug
 	}
 
 	// Fall back to formatted slug
@@ -150,21 +150,21 @@ async function getFolderTitle(entries: any[], groupKey: string): Promise<string>
 const agreementsFolderTitles = new Map<string, string>();
 for (const groupKey of Object.keys(agreementsTree)) {
 	if (groupKey !== '_root') {
-		agreementsFolderTitles.set(groupKey, await getFolderTitle(agreements, groupKey));
+		agreementsFolderTitles.set(groupKey, await getFolderTitle('agreements', groupKey));
 	}
 }
 
 const policiesFolderTitles = new Map<string, string>();
 for (const groupKey of Object.keys(policiesTree)) {
 	if (groupKey !== '_root') {
-		policiesFolderTitles.set(groupKey, await getFolderTitle(policies, groupKey));
+		policiesFolderTitles.set(groupKey, await getFolderTitle('policies', groupKey));
 	}
 }
 
 const proposalsFolderTitles = new Map<string, string>();
 for (const groupKey of Object.keys(proposalsTree)) {
 	if (groupKey !== '_root') {
-		proposalsFolderTitles.set(groupKey, await getFolderTitle(proposals, groupKey));
+		proposalsFolderTitles.set(groupKey, await getFolderTitle('proposals', groupKey));
 	}
 }
 
