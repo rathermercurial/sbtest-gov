@@ -11,6 +11,9 @@
    ======================================== */
 
 :root {
+  /* Layout Dimensions */
+  --sl-sidebar-width: 21rem;  /* Increased from default 18.75rem for better readability */
+
   /* Accent Colors - Map to Sage palette */
   --sl-color-accent-low: var(--sb-primary-pale);   /* #C5D4BA - sage pale */
   --sl-color-accent: var(--sb-primary);             /* #7FA568 - sage */
@@ -23,6 +26,10 @@
   --sl-color-gray-4: var(--sb-gray);        /* #6B6B6B - medium gray */
   --sl-color-gray-5: var(--sb-darkgray);    /* #4A4A4A - dark gray (borders) */
   --sl-color-gray-6: var(--sb-charcoal);    /* #2F2F2F - darkest (text) */
+
+  /* Text Colors - Ensure good contrast in light mode */
+  --sl-color-text: var(--sb-charcoal);      /* #2F2F2F - main body text */
+  --sl-color-text-accent: var(--sb-primary-dark);
 
   /* Typography - Using Starlight defaults for now */
   /* (Custom fonts will be added later) */
@@ -318,70 +325,67 @@ starlight-theme-select select {
 /* Visual hierarchy for sidebar navigation */
 
 /* Add visual separator before Reference section (de-emphasized items) */
-.sidebar-content nav > ul > li:last-child {
+.sidebar-content > ul > li:last-child {
 	margin-top: 2rem;
 	padding-top: 1.5rem;
 	border-top: 1px solid var(--sb-border);
 }
 
 /* De-emphasize the Reference section */
-.sidebar-content nav > ul > li:last-child > details > summary {
+.sidebar-content > ul > li:last-child > details > summary {
 	opacity: 0.7;
 	font-size: 0.9rem;
 }
 
-.sidebar-content nav > ul > li:last-child a {
+.sidebar-content > ul > li:last-child a {
 	opacity: 0.8;
 	font-size: 0.875rem;
 }
 
 /* Hover states for de-emphasized items */
-.sidebar-content nav > ul > li:last-child > details > summary:hover,
-.sidebar-content nav > ul > li:last-child a:hover {
+.sidebar-content > ul > li:last-child > details > summary:hover,
+.sidebar-content > ul > li:last-child a:hover {
 	opacity: 1;
 }
 
 /* Main sections (Agreements, Policies, Proposals) styling */
 /* Keep them prominent with default styling */
-.sidebar-content nav > ul > li:not(:last-child) > details > summary {
+.sidebar-content > ul > li:not(:last-child) > details > summary {
 	font-weight: 500;
 }
 
 /* Enhanced navigation with brand colors */
-.sidebar-content nav a,
-.sidebar-content nav a:link,
-.sidebar-content nav a:visited {
-	color: var(--sb-charcoal);
-	text-decoration-color: var(--sb-charcoal);
+.sidebar-content a,
+.sidebar-content a:link,
+.sidebar-content a:visited {
+	color: var(--sb-primary);
+	text-decoration-color: var(--sb-primary);
 }
 
-.sidebar-content nav a:hover {
-	background-color: var(--sb-text-highlight);
-	color: var(--sb-darkgray);
-	text-decoration-color: var(--sb-darkgray);
-}
-
-.sidebar-content nav a[aria-current="page"],
-.sidebar-content nav a[aria-current="page"]:link,
-.sidebar-content nav a[aria-current="page"]:visited {
-	background-color: var(--sb-highlight);
+.sidebar-content a:hover {
 	color: var(--sb-primary-dark);
-	border-left: 3px solid var(--sb-primary);
 	text-decoration-color: var(--sb-primary-dark);
 }
 
-.sidebar-content nav details > summary {
+.sidebar-content a[aria-current="page"],
+.sidebar-content a[aria-current="page"]:link,
+.sidebar-content a[aria-current="page"]:visited {
+	color: var(--sb-rust);
+	text-decoration-color: var(--sb-rust);
+}
+
+.sidebar-content details > summary {
 	color: var(--sb-charcoal);
 	transition: color var(--sb-transition-fast);
 }
 
-.sidebar-content nav details > summary:hover {
-	color: var(--sb-darkgray);
+.sidebar-content details > summary:hover {
+	color: #3A3A3A;
 }
 
 /* Responsive adjustments */
 @media (max-width: 72rem) {
-	.sidebar-content nav > ul > li:last-child {
+	.sidebar-content > ul > li:last-child {
 		margin-top: 1.5rem;
 		padding-top: 1rem;
 	}
@@ -587,25 +591,303 @@ starlight-theme-select select {
 	}
 
 	/* Navigation colors in dark mode */
-	.sidebar-content nav a,
-	.sidebar-content nav a:link,
-	.sidebar-content nav a:visited {
+	.sidebar-content a,
+	.sidebar-content a:link,
+	.sidebar-content a:visited {
+		color: var(--sb-primary);
+		text-decoration-color: var(--sb-primary);
+	}
+
+	.sidebar-content a:hover {
+		color: var(--sb-primary-dark);
+		text-decoration-color: var(--sb-primary-dark);
+	}
+
+	.sidebar-content a[aria-current="page"],
+	.sidebar-content a[aria-current="page"]:link,
+	.sidebar-content a[aria-current="page"]:visited {
+		color: var(--sb-secondary);
+		text-decoration-color: var(--sb-secondary);
+	}
+
+	.sidebar-content details > summary {
 		color: var(--sb-darkgray);
-		text-decoration-color: var(--sb-darkgray);
 	}
 
-	.sidebar-content nav a:hover {
-		color: var(--sb-lightgray);
-		text-decoration-color: var(--sb-lightgray);
+	.sidebar-content details > summary:hover {
+		color: #E0E0E0;
+	}
+}
+
+/* ========================================
+   RIGHT TOC SIDEBAR WIDTH FIX
+   Constrain to match left sidebar width
+   ======================================== */
+
+/*
+ * The lg:sl-flex container has two children that share extra space:
+ * - right-sidebar-container: var(--sl-sidebar-width) + (extra / 2)
+ * - main-pane: var(--sl-content-width) + (extra / 2)
+ *
+ * To constrain the right sidebar to just var(--sl-sidebar-width),
+ * we need the main-pane to absorb ALL the extra space, not just half.
+ *
+ * Solution: Fix right sidebar width and make main-pane flexible.
+ */
+
+@media (min-width: 72rem) {
+	/* Fix right sidebar to exact width */
+	aside[class*="right-sidebar-container"],
+	.right-sidebar-container {
+		flex: 0 0 var(--sl-sidebar-width);
+		width: var(--sl-sidebar-width);
+		max-width: var(--sl-sidebar-width);
 	}
 
-	.sidebar-content nav details > summary {
-		color: var(--sb-darkgray);
+	/* Make main-pane flexible to absorb remaining space */
+	div[class*="main-pane"],
+	.main-pane {
+		flex: 1 1 auto;
+		width: auto;
+		max-width: none;
+		--sl-content-margin-inline: auto;
 	}
 
-	.sidebar-content nav details > summary:hover {
-		color: var(--sb-lightgray);
+	/* Constrain the inner fixed element */
+	.right-sidebar-container .right-sidebar,
+	aside[class*="right-sidebar-container"] > div {
+		width: var(--sl-sidebar-width);
+		max-width: var(--sl-sidebar-width);
 	}
+}
+
+/* ========================================
+   PROPOSAL VOTING RESULTS COMPONENT
+   Theme-aware styling for light and dark modes
+   ======================================== */
+
+.snapshot-metadata {
+	background: var(--sb-cream);
+	border: 1px solid var(--sb-border);
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+	margin-top: 2rem;
+}
+
+.voting-results-header {
+	background: var(--sb-primary);
+	color: var(--sb-charcoal);
+	padding: 0.75rem 1rem;
+	border-radius: 0.375rem;
+	margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+}
+
+.header-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.voting-results-header h2 {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+	min-width: 0;
+	flex: 1 1 auto;
+	color: var(--sb-charcoal);
+}
+
+.status-badge {
+	font-size: 0.875rem;
+	font-weight: 600;
+	padding: 0.25rem 0.75rem;
+	background: var(--sb-charcoal);
+	color: var(--sb-cream);
+	border-radius: 0.25rem;
+	text-transform: uppercase;
+	white-space: nowrap;
+	flex: 0 0 auto;
+}
+
+.metadata-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.metadata-label {
+	display: block;
+	color: var(--sb-gray);
+	font-size: 0.875rem;
+	margin-bottom: 0.25rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.metadata-value {
+	color: var(--sb-charcoal);
+}
+
+.metadata-value-large {
+	font-size: 1.25rem;
+	color: var(--sb-charcoal);
+	font-weight: 700;
+}
+
+.metadata-value-large.metadata-accent {
+	color: var(--sb-primary-dark);
+}
+
+.metadata-value-mono {
+	color: var(--sb-charcoal);
+	font-family: monospace;
+	font-size: 0.875rem;
+}
+
+.choices-details {
+	margin-top: 1.5rem;
+}
+
+.choices-summary {
+	cursor: pointer;
+	color: var(--sb-charcoal);
+	font-weight: 600;
+	padding: 0.75rem;
+	background: var(--sb-lightgray);
+	border-radius: 0.375rem;
+	user-select: none;
+}
+
+.choices-summary:hover {
+	background: var(--sb-gray);
+}
+
+.choices-content {
+	margin-top: 1rem;
+	background: var(--sb-surface);
+	border-radius: 0.375rem;
+	padding: 1rem;
+	border: 1px solid var(--sb-border);
+}
+
+.choice-row {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.75rem;
+	border-bottom: 1px solid var(--sb-border);
+	align-items: center;
+}
+
+.choice-row:last-child {
+	border-bottom: none;
+}
+
+.choice-name {
+	color: var(--sb-charcoal);
+	font-weight: 500;
+}
+
+.choice-score {
+	color: var(--sb-darkgray);
+	font-family: monospace;
+	font-size: 0.875rem;
+}
+
+.choice-percentage {
+	color: var(--sb-gray);
+}
+
+.metadata-footer {
+	margin-top: 1.5rem;
+	padding-top: 1.5rem;
+	border-top: 2px solid var(--sb-border);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1.25rem;
+	font-size: 0.875rem;
+}
+
+.snapshot-link {
+	color: var(--sb-primary);
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.snapshot-link:hover {
+	color: var(--sb-primary-dark);
+	text-decoration: underline;
+}
+
+/* Dark mode overrides for voting results */
+[data-theme="dark"] .snapshot-metadata {
+	background: var(--sb-light-alt);
+	border-color: var(--sb-border);
+}
+
+[data-theme="dark"] .voting-results-header {
+	background: var(--sb-primary);
+	color: var(--sb-light);
+}
+
+[data-theme="dark"] .voting-results-header h2 {
+	color: var(--sb-light);
+}
+
+[data-theme="dark"] .status-badge {
+	background: var(--sb-highlight);
+	color: var(--sb-primary-light);
+	border: 1px solid var(--sb-primary);
+}
+
+[data-theme="dark"] .metadata-label {
+	color: var(--sb-gray);
+}
+
+[data-theme="dark"] .metadata-value,
+[data-theme="dark"] .metadata-value-large,
+[data-theme="dark"] .metadata-value-mono {
+	color: var(--sb-dark);
+}
+
+[data-theme="dark"] .metadata-value-large.metadata-accent {
+	color: var(--sb-primary-light);
+}
+
+[data-theme="dark"] .choices-summary {
+	color: var(--sb-dark);
+	background: #3A3A3A;
+}
+
+[data-theme="dark"] .choices-summary:hover {
+	background: var(--sb-lightgray);
+}
+
+[data-theme="dark"] .choices-content {
+	background: var(--sb-light);
+	border-color: var(--sb-border);
+}
+
+[data-theme="dark"] .choice-name {
+	color: var(--sb-dark);
+}
+
+[data-theme="dark"] .choice-score {
+	color: var(--sb-darkgray);
+}
+
+[data-theme="dark"] .choice-percentage {
+	color: var(--sb-gray);
+}
+
+[data-theme="dark"] .snapshot-link {
+	color: var(--sb-primary-light);
+}
+
+[data-theme="dark"] .snapshot-link:hover {
+	color: var(--sb-primary);
 }
 
 /* ========================================

@@ -5,10 +5,12 @@
  * Overrides Starlight's default Sidebar to dynamically generate navigation
  * from governance content collections (agreements, policies, proposals).
  */
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import { Icon } from '@astrojs/starlight/components';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 // Get all entries from governance collections
 const agreements = await getCollection('agreements');
@@ -110,6 +112,62 @@ function formatProposalTitle(entry: any): string {
 	return title.substring(0, MAX_LENGTH - 1) + '…';
 }
 
+/**
+ * Get folder title from index.md file
+ * Priority: 1) title frontmatter, 2) h1 heading, 3) formatted slug
+ */
+async function getFolderTitle(collectionName: string, groupKey: string): Promise<string> {
+	try {
+		// Read index.md file from governance submodule
+		const indexPath = join(process.cwd(), 'src/content/governance', collectionName, groupKey, 'index.md');
+		const content = await readFile(indexPath, 'utf-8');
+
+		// Extract frontmatter
+		const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+		if (frontmatterMatch) {
+			const frontmatter = frontmatterMatch[1];
+			const titleMatch = frontmatter.match(/^title:\s*(.+)$/m);
+			if (titleMatch) {
+				return titleMatch[1].trim();
+			}
+		}
+
+		// Try to extract h1 from content
+		const h1Match = content.match(/^#\s+(.+)$/m);
+		if (h1Match) {
+			return h1Match[1].trim();
+		}
+	} catch (error) {
+		// Index file doesn't exist or couldn't be read
+		// Fall through to return formatted slug
+	}
+
+	// Fall back to formatted slug
+	return formatGroupName(groupKey);
+}
+
+// Build title maps for folder groups
+const agreementsFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(agreementsTree)) {
+	if (groupKey !== '_root') {
+		agreementsFolderTitles.set(groupKey, await getFolderTitle('agreements', groupKey));
+	}
+}
+
+const policiesFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(policiesTree)) {
+	if (groupKey !== '_root') {
+		policiesFolderTitles.set(groupKey, await getFolderTitle('policies', groupKey));
+	}
+}
+
+const proposalsFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(proposalsTree)) {
+	if (groupKey !== '_root') {
+		proposalsFolderTitles.set(groupKey, await getFolderTitle('proposals', groupKey));
+	}
+}
+
 const currentPath = Astro.url.pathname;
 ---
 
@@ -143,7 +201,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/agreements/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{agreementsFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
@@ -194,7 +252,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/policies/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{policiesFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
@@ -219,7 +277,7 @@ const currentPath = Astro.url.pathname;
 
 		<!-- Proposals Section -->
 		<li class="top-level-item">
-			<details open>
+			<details open={currentPath.startsWith('/proposals/')}>
 				<summary>
 					<a href="/proposals/">
 						<span class="group-label">
@@ -245,7 +303,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/proposals/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{proposalsFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
