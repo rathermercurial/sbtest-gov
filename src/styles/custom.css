@@ -27,6 +27,10 @@
   --sl-color-gray-5: var(--sb-darkgray);    /* #4A4A4A - dark gray (borders) */
   --sl-color-gray-6: var(--sb-charcoal);    /* #2F2F2F - darkest (text) */
 
+  /* Text Colors - Ensure good contrast in light mode */
+  --sl-color-text: var(--sb-charcoal);      /* #2F2F2F - main body text */
+  --sl-color-text-accent: var(--sb-primary-dark);
+
   /* Typography - Using Starlight defaults for now */
   /* (Custom fonts will be added later) */
 
