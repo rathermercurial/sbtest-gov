@@ -5,7 +5,7 @@
  * Overrides Starlight's default Sidebar to dynamically generate navigation
  * from governance content collections (agreements, policies, proposals).
  */
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import { Icon } from '@astrojs/starlight/components';
@@ -110,6 +110,64 @@ function formatProposalTitle(entry: any): string {
 	return title.substring(0, MAX_LENGTH - 1) + '…';
 }
 
+/**
+ * Get folder title from index.md file
+ * Priority: 1) title frontmatter, 2) h1 heading, 3) formatted slug
+ */
+async function getFolderTitle(entries: any[], groupKey: string): Promise<string> {
+	// Look for index.md in this folder
+	const indexEntry = entries.find(entry =>
+		entry.id === `${groupKey}/index` || entry.id === groupKey
+	);
+
+	if (!indexEntry) {
+		// No index file, use formatted slug
+		return formatGroupName(groupKey);
+	}
+
+	// Try frontmatter title first
+	if (indexEntry.data?.title) {
+		return indexEntry.data.title;
+	}
+
+	// Try to extract h1 from content
+	try {
+		const { headings } = await render(indexEntry);
+		const h1 = headings.find(h => h.depth === 1);
+		if (h1?.text) {
+			return h1.text;
+		}
+	} catch (error) {
+		// If render fails, fall back to slug
+		console.log(`Could not render ${groupKey}/index for heading extraction`);
+	}
+
+	// Fall back to formatted slug
+	return formatGroupName(groupKey);
+}
+
+// Build title maps for folder groups
+const agreementsFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(agreementsTree)) {
+	if (groupKey !== '_root') {
+		agreementsFolderTitles.set(groupKey, await getFolderTitle(agreements, groupKey));
+	}
+}
+
+const policiesFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(policiesTree)) {
+	if (groupKey !== '_root') {
+		policiesFolderTitles.set(groupKey, await getFolderTitle(policies, groupKey));
+	}
+}
+
+const proposalsFolderTitles = new Map<string, string>();
+for (const groupKey of Object.keys(proposalsTree)) {
+	if (groupKey !== '_root') {
+		proposalsFolderTitles.set(groupKey, await getFolderTitle(proposals, groupKey));
+	}
+}
+
 const currentPath = Astro.url.pathname;
 ---
 
@@ -143,7 +201,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/agreements/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{agreementsFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
@@ -194,7 +252,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/policies/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{policiesFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
@@ -245,7 +303,7 @@ const currentPath = Astro.url.pathname;
 								<details open={currentPath.startsWith(`/proposals/${groupKey}/`)}>
 									<summary>
 											<span class="group-label">
-												<span>{formatGroupName(groupKey)}</span>
+												<span>{proposalsFolderTitles.get(groupKey) || formatGroupName(groupKey)}</span>
 											</span>
 									</summary>
 									<ul>
