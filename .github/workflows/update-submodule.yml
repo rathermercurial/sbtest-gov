@@ -29,9 +29,7 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git add src/content/governance
-            git commit -m "chore: Update governance submodule to latest
-
-Co-authored-by: rathermercurial <rathermercurial@protonmail.com>"
+            git commit -m "chore: Update governance submodule to latest"
             git push
           else
             echo "No changes to commit"
