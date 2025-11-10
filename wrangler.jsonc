@@ -6,10 +6,5 @@
     "directory": "./dist",
     "not_found_handling": "404-page"
   },
-  "routes": [
-    {
-      "pattern": "sbgov.test.rathermercurial.xyz",
-      "custom_domain": true
-    }
-  ]
+  "route": "sbgov.test.rathermercurial.xyz/*"
 }
