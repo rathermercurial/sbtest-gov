@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "governance-site",
+  "name": "sbtest-gov",
   "compatibility_date": "2025-11-08",
   "assets": {
     "directory": "./dist",
