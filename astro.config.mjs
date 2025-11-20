@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://governance.superbenefit.org',
+	site: 'https://sbgov.test.rathermercurial.xyz',
 	vite: {
 		ssr: {
 			// Allow marked to be processed by Vite for SSR
